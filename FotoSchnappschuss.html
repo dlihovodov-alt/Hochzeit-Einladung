@@ -128,23 +128,25 @@
             object-fit: cover;
         }
 
-        /* KLEINER LÖSCH-BUTTON (X) IN DER ECKE */
+/* KLEINER LÖSCH-BUTTON (X) IN DER ECKE */
         .delete-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(67, 57, 50, 0.8);
+            top: 2px;
+            right: 2px;
+            background: rgba(67, 57, 50, 0.85);
             color: #ffffff;
             border: none;
             border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            font-size: 13px;
             font-weight: bold;
+            line-height: 1;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding-bottom: 2px; /* Zieht das X optisch perfekt in die Mitte */
             transition: background 0.2s ease;
         }
 
