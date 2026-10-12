@@ -75,7 +75,7 @@
             border-left: 2px solid #d4af37;
         }
 
-        /* SCHLEIER MIT PERLEN (Senkrecht öffnend) */
+        /* SCHLEIER MIT PERLEN */
         .veil {
             position: absolute;
             top: 0;
@@ -91,7 +91,6 @@
         .veil-left { left: 0; border-right: 1px solid rgba(255,255,255,0.4); }
         .veil-right { right: 0; border-left: 1px solid rgba(255,255,255,0.4); }
 
-        /* Perlen auf dem Schleier */
         .pearl {
             position: absolute;
             width: 8px;
@@ -101,65 +100,76 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* GOLD SIEGEL & AURA */
+        /* ECHTES ORGANISCHES WACHSSIEGEL */
         .seal-interactive {
             position: absolute;
             z-index: 10;
             cursor: pointer;
             text-align: center;
-            transition: transform 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .seal-interactive:hover {
-            transform: scale(1.06);
+            transform: scale(1.08);
         }
 
-        .orbit-rings {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 220px;
-            height: 220px;
-            transform: translate(-50%, -50%);
-            border: 1px solid rgba(212,175,55,0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            box-shadow: 0 0 15px rgba(212,175,55,0.2);
-            animation: spin 12s linear infinite;
-        }
-
-        .orbit-rings::before {
-            content: '';
-            position: absolute;
-            inset: -12px;
-            border: 1.5px dashed rgba(252,246,186,0.6);
-            border-radius: 50%;
-        }
-
-        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-
-        .gold-seal-3d {
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle at 35% 35%, #ffe89c, #d4af37 40%, #8a6d1c 85%, #59430b 100%);
-            border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -4px 8px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.4);
-            border: 5px solid #b38728;
+        /* Das Wachs mit unregelmäßig geschmolzenem Rand */
+        .real-wax-seal {
+            width: 155px;
+            height: 155px;
+            margin: 0 auto 15px auto;
+            position: relative;
+            background: radial-gradient(circle at 35% 30%, #ffd97d 0%, #d4af37 35%, #997821 70%, #523f0c 100%);
+            /* Organisch geschmolzener Wachsrand durch Clip-Path */
+            clip-path: polygon(
+                50% 0%, 65% 3%, 78% 8%, 88% 18%, 96% 30%, 100% 45%, 
+                97% 60%, 92% 74%, 82% 86%, 69% 95%, 52% 99%, 36% 96%, 
+                20% 90%, 9% 78%, 2% 63%, 0% 48%, 4% 32%, 12% 18%, 24% 7%, 37% 2%
+            );
+            filter: drop-shadow(0px 10px 18px rgba(0, 0, 0, 0.7));
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin: 0 auto 20px auto;
+        }
+
+        /* Vertiefung/Prägung im geschmolzenen Wachs */
+        .wax-inner-stamp {
+            width: 122px;
+            height: 122px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #e0bc43 0%, #b89328 60%, #7a5c12 100%);
+            border: 3px inset rgba(255, 235, 170, 0.6);
+            box-shadow: 
+                inset 3px 3px 8px rgba(0, 0, 0, 0.6),
+                inset -2px -2px 6px rgba(255, 255, 255, 0.4),
+                0 0 10px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
+        }
+
+        /* Innere gestempelte Rille */
+        .wax-inner-stamp::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 2px dashed rgba(80, 58, 10, 0.4);
+            border-radius: 50%;
+            box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
 
         .seal-initials {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 3.2rem;
+            font-size: 3rem;
             font-weight: 600;
-            color: #382708;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.6);
+            color: #3b2806;
+            /* 3D-Relief Prägeeffekt auf den Buchstaben */
+            text-shadow: 
+                1px 1px 1px rgba(255, 245, 200, 0.8),
+                -1px -1px 2px rgba(0, 0, 0, 0.7);
             letter-spacing: 2px;
+            z-index: 2;
         }
 
         .seal-title {
@@ -185,7 +195,7 @@
             50% { opacity: 1; transform: translateY(-3px); }
         }
 
-        /* SENKRECHTE ÖFFNUNGS-ANIMATION (Nach links und rechts aufschieben) */
+        /* SENKRECHTE ÖFFNUNGS-ANIMATION */
         .open .flap-left { transform: translateX(-100%); }
         .open .flap-right { transform: translateX(100%); }
         .open .veil-left { transform: translateX(-100%); opacity: 0; }
@@ -302,10 +312,12 @@
             <div class="pearl" style="top:80%; right:60%;"></div>
         </div>
 
+        <!-- REALISTISCHES WACHSSIEGEL -->
         <div class="seal-interactive" onclick="openEnvelope()">
-            <div class="orbit-rings"></div>
-            <div class="gold-seal-3d">
-                <span class="seal-initials">A & L</span>
+            <div class="real-wax-seal">
+                <div class="wax-inner-stamp">
+                    <span class="seal-initials">A & L</span>
+                </div>
             </div>
             <div class="seal-title">Entdecke unsere magische Einladung!</div>
             <div class="seal-subtitle">Tippe oder klicke das Siegel zum Öffnen</div>
