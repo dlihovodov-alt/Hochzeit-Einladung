@@ -128,6 +128,30 @@
             object-fit: cover;
         }
 
+        /* KLEINER LÖSCH-BUTTON (X) IN DER ECKE */
+        .delete-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(67, 57, 50, 0.8);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c62828;
+        }
+
         .form-group { margin-bottom: 20px; text-align: left; }
         label { display: block; font-size: 1rem; color: var(--text-color); margin-bottom: 6px; }
 
@@ -267,27 +291,41 @@
 
     function handleFileSelect(event) {
         const newFiles = Array.from(event.target.files);
-        const container = document.getElementById('preview-container');
 
         newFiles.forEach(file => {
             if (!file.type.startsWith('image/')) return;
 
-            // Zur globalen Liste hinzufügen
             selectedFiles.push(file);
+        });
 
+        renderPreviews();
+        event.target.value = '';
+    }
+
+    function renderPreviews() {
+        const container = document.getElementById('preview-container');
+        container.innerHTML = '';
+
+        selectedFiles.forEach((file, index) => {
             const item = document.createElement('div');
             item.className = 'preview-item';
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                item.innerHTML = `<img src="${e.target.result}" alt="Vorschau">`;
-                container.appendChild(item);
+                item.innerHTML = `
+                    <img src="${e.target.result}" alt="Vorschau">
+                    <button type="button" class="delete-btn" onclick="removeFile(${index})" title="Entfernen">×</button>
+                `;
             };
             reader.readAsDataURL(file);
-        });
 
-        // Input zurücksetzen, damit man auch dieselbe Datei nochmal auswählen könnte falls nötig
-        event.target.value = '';
+            container.appendChild(item);
+        });
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        renderPreviews();
     }
 
     function compressImage(file, maxWidth = 1600, quality = 0.75) {
