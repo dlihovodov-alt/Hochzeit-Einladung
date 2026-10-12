@@ -37,7 +37,7 @@
             transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        /* ENVELOPE BOX */
+        /* ENVELOPE CONTAINER */
         .envelope-container {
             position: relative;
             width: 90%;
@@ -52,12 +52,12 @@
             align-items: center;
         }
 
-        /* Samt & Flap Animation */
-        .flap-top, .flap-bottom {
+        /* SENKRECHTE HÄLFTEN (Links & Rechts) */
+        .flap-left, .flap-right {
             position: absolute;
-            left: 0;
-            width: 100%;
-            height: 50.5%;
+            top: 0;
+            width: 50.5%;
+            height: 100%;
             background: #25282d;
             background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 0);
             background-size: 16px 16px;
@@ -65,31 +65,31 @@
             z-index: 2;
         }
 
-        .flap-top {
-            top: 0;
-            border-bottom: 2px solid #d4af37;
+        .flap-left {
+            left: 0;
+            border-right: 2px solid #d4af37;
         }
 
-        .flap-bottom {
-            bottom: 0;
-            border-top: 2px solid #d4af37;
+        .flap-right {
+            right: 0;
+            border-left: 2px solid #d4af37;
         }
 
-        /* SCHLEIER MIT PERLEN */
+        /* SCHLEIER MIT PERLEN (Senkrecht öffnend) */
         .veil {
             position: absolute;
             top: 0;
-            width: 45%;
+            width: 50%;
             height: 100%;
             background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.25) 100%);
             backdrop-filter: blur(2px);
             z-index: 3;
             pointer-events: none;
-            transition: transform 1.2s ease, opacity 1s ease;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease;
         }
 
-        .veil-left { left: 0; border-right: 1px solid rgba(255,255,255,0.4); transform: skewX(-6deg); origin: left top; }
-        .veil-right { right: 0; border-left: 1px solid rgba(255,255,255,0.4); transform: skewX(6deg); origin: right top; }
+        .veil-left { left: 0; border-right: 1px solid rgba(255,255,255,0.4); }
+        .veil-right { right: 0; border-left: 1px solid rgba(255,255,255,0.4); }
 
         /* Perlen auf dem Schleier */
         .pearl {
@@ -185,11 +185,11 @@
             50% { opacity: 1; transform: translateY(-3px); }
         }
 
-        /* ÖFFNUNGS-ANIMATION */
-        .open .flap-top { transform: translateY(-100%); }
-        .open .flap-bottom { transform: translateY(100%); }
-        .open .veil-left { transform: translateX(-100%) skewX(-6deg); opacity: 0; }
-        .open .veil-right { transform: translateX(100%) skewX(6deg); opacity: 0; }
+        /* SENKRECHTE ÖFFNUNGS-ANIMATION (Nach links und rechts aufschieben) */
+        .open .flap-left { transform: translateX(-100%); }
+        .open .flap-right { transform: translateX(100%); }
+        .open .veil-left { transform: translateX(-100%); opacity: 0; }
+        .open .veil-right { transform: translateX(100%); opacity: 0; }
         .open .seal-interactive { opacity: 0; pointer-events: none; transform: scale(1.3); }
 
         /* --- EINLADUNGS-KARTE --- */
@@ -288,18 +288,18 @@
 <!-- UMSCHLAG STAGE -->
 <div id="stage-overlay">
     <div class="envelope-container" id="envelope-box">
-        <div class="flap-top"></div>
-        <div class="flap-bottom"></div>
+        <div class="flap-left"></div>
+        <div class="flap-right"></div>
         
         <div class="veil veil-left">
-            <div class="pearl" style="top:20%; left:40%;"></div>
-            <div class="pearl" style="top:50%; left:70%;"></div>
-            <div class="pearl" style="top:80%; left:30%;"></div>
+            <div class="pearl" style="top:25%; left:30%;"></div>
+            <div class="pearl" style="top:60%; left:65%;"></div>
+            <div class="pearl" style="top:85%; left:40%;"></div>
         </div>
         <div class="veil veil-right">
-            <div class="pearl" style="top:30%; right:50%;"></div>
-            <div class="pearl" style="top:65%; right:25%;"></div>
-            <div class="pearl" style="top:85%; right:60%;"></div>
+            <div class="pearl" style="top:20%; right:55%;"></div>
+            <div class="pearl" style="top:55%; right:30%;"></div>
+            <div class="pearl" style="top:80%; right:60%;"></div>
         </div>
 
         <div class="seal-interactive" onclick="openEnvelope()">
