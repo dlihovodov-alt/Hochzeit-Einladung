@@ -27,19 +27,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 30px 15px;
+            padding: 20px 12px;
         }
 
         .container {
             background: var(--card-bg);
             width: 100%;
             max-width: 620px;
-            padding: 55px 40px;
+            padding: 50px 30px;
             border-radius: 4px;
             box-shadow: 0 15px 45px rgba(67, 57, 50, 0.08);
             text-align: center;
             border: 1px solid var(--accent-line);
             position: relative;
+            overflow: hidden;
         }
 
         .container::before {
@@ -52,36 +53,40 @@
         }
 
         .names {
-            font-size: 1.2rem;
-            letter-spacing: 5px;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--text-color);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-weight: 400;
         }
 
+        /* DYNAMISCH SCALIERENDE ÜBERSCHRIFT FÜR MOBILGERÄTE */
         .script-title {
             font-family: 'Great Vibes', cursive;
-            font-size: 4.2rem;
+            font-size: clamp(2.6rem, 8vw, 4.2rem);
             color: var(--text-color);
             font-weight: 400;
-            line-height: 1.1;
+            line-height: 1.15;
             margin-bottom: 15px;
+            word-break: keep-all;
+            hyphens: none;
+            padding: 0 5px;
         }
 
         .divider {
             width: 60px;
             height: 1px;
             background: var(--text-color);
-            margin: 25px auto;
+            margin: 20px auto;
             opacity: 0.4;
         }
 
         .intro-text {
-            font-size: 1.15rem;
-            line-height: 1.7;
+            font-size: 1.1rem;
+            line-height: 1.6;
             color: var(--text-color);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         /* UPLOAD / KAMERA ZONE */
@@ -89,7 +94,7 @@
             background-color: var(--box-bg);
             border: 2px dashed var(--accent-line);
             border-radius: 4px;
-            padding: 35px 20px;
+            padding: 30px 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 25px;
@@ -101,19 +106,19 @@
         }
 
         .drop-zone-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.3rem;
+            margin-bottom: 8px;
         }
 
         .drop-zone-text {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--text-color);
             margin-bottom: 5px;
             font-weight: 600;
         }
 
         .drop-zone-subtext {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-light);
             font-style: italic;
         }
@@ -125,15 +130,15 @@
         /* VORSCHAU-GRID */
         .preview-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .preview-item {
             position: relative;
             width: 100%;
-            height: 90px;
+            height: 80px;
             border-radius: 4px;
             overflow: hidden;
             border: 1px solid var(--accent-line);
@@ -196,9 +201,23 @@
 
         .footer-note {
             font-style: italic;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-light);
-            margin-top: 25px;
+            margin-top: 20px;
+        }
+
+        /* ANPASSUNGEN FÜR SEHR SCHMALE HANDY-DISPLAYS */
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 18px;
+            }
+            .container::before {
+                inset: 8px;
+            }
+            .names {
+                font-size: 0.95rem;
+                letter-spacing: 3px;
+            }
         }
     </style>
 </head>
@@ -222,7 +241,6 @@
             <div class="drop-zone-icon">📸</div>
             <div class="drop-zone-text">Foto aufnehmen oder auswählen</div>
             <div class="drop-zone-subtext">Tippen, um die Kamera oder Galerie zu öffnen</div>
-            <!-- WICHTIG: accept="image/*" erlaubt beides (Kamera & Galerie-Auswahl auf Smartphones) -->
             <input type="file" id="file-input" name="hochzeitsfotos" multiple accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
