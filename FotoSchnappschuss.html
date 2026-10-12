@@ -233,15 +233,18 @@
         Macht direkt ein Foto oder Video oder wählt eure schönsten Aufnahmen aus der Galerie aus!
     </p>
 
-    <!-- FORMSPREE FORMULAR FÜR DIE HOCHZEITSFOTOS & VIDEOS -->
-    <form id="upload-form" action="https://formspree.io/f/mbgdkeok" method="POST" enctype="multipart/form-data">
+    <!-- WEB3FORMS FORMULAR FÜR DIE HOCHZEITSFOTOS & VIDEOS -->
+    <form id="upload-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+        
+        <!-- HIER DEINEN WEB3FORMS ACCESS KEY EINFÜGEN -->
+        <input type="hidden" name="access_key" value="aeb2c8ed-b5da-4cde-b281-903525fe7940">
         
         <!-- FOTO / VIDEO / KAMERA AUSWAHL -->
         <div class="drop-zone" onclick="document.getElementById('file-input').click()">
             <div class="drop-zone-icon">📸🎥</div>
             <div class="drop-zone-text">Foto oder Video aufnehmen / auswählen</div>
             <div class="drop-zone-subtext">Tippen, um die Kamera oder Galerie zu öffnen</div>
-            <input type="file" id="file-input" name="hochzeitsmedien" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
+            <input type="file" id="file-input" name="attachment" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
         </div>
 
         <!-- BILD- & VIDEOVORSCHAU -->
