@@ -3,44 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hochzeitseinladung</title>
+    <title>Hochzeitseinladung - Anna & Lisa</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #f6f3eb;
-            --card-bg: #ffffff;
-            --primary-color: #8a7356;
-            --text-color: #4a4a4a;
-            --accent-color: #d4af37;
-            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-        }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-color);
-            background-image: radial-gradient(#e5dec9 1px, transparent 0);
-            background-size: 24px 24px;
-            color: var(--text-color);
+            background-color: #f6f3eb;
+            color: #4a4a4a;
             line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* --- OVERLAY / ENVELOPE / VEIL --- */
+        /* --- UMSCHLAG & OVERLAY --- */
         #envelope-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 9999;
+            z-index: 99999;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgba(246, 243, 235, 0.95);
-            transition: opacity 1s ease, visibility 1s ease;
+            background-color: #f6f3eb;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
         .curtain-panel {
@@ -49,99 +38,62 @@
             width: 100%;
             height: 50.5%;
             background-color: #23272a;
-            background-image: 
-                radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 0),
-                linear-gradient(to bottom, #1d2023, #2a2f33);
-            background-size: 20px 20px, 100% 100%;
             transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-bottom: 2px solid #d4af37;
         }
 
-        .curtain-top { 
-            top: 0; 
-            border-bottom: 2px solid var(--accent-color); 
-        }
+        .curtain-top { top: 0; }
+        .curtain-bottom { bottom: 0; border-top: 2px solid #d4af37; border-bottom: none; }
 
-        .curtain-bottom { 
-            bottom: 0; 
-            border-top: 2px solid var(--accent-color); 
-        }
-
-        /* Transparenter Schleier-Effekt */
+        /* Schleier-Effekt */
         .veil-left, .veil-right {
             position: absolute;
             top: 0;
             width: 35vw;
             height: 100%;
             background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.25) 70%, rgba(255,255,255,0.05) 100%);
-            backdrop-filter: blur(2px);
-            z-index: 9999;
+            z-index: 100000;
             pointer-events: none;
-            transition: opacity 1s ease, transform 1.2s ease;
+            transition: transform 1.2s ease, opacity 0.8s ease;
         }
+        .veil-left { left: 0; }
+        .veil-right { right: 0; }
 
-        .veil-left {
-            left: 0;
-            border-right: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 10px 0 30px rgba(255,255,255,0.2);
-            transform: skewX(-5deg);
-        }
-
-        .veil-right {
-            right: 0;
-            border-left: 1px solid rgba(255,255,255,0.5);
-            box-shadow: -10px 0 30px rgba(255,255,255,0.2);
-            transform: skewX(5deg);
-        }
-
-        /* Goldenes Siegel & Info */
+        /* Siegel & Text */
         .seal-wrapper {
             position: absolute;
-            z-index: 10001;
+            z-index: 100001;
             cursor: pointer;
             text-align: center;
-            transition: transform 0.4s ease, opacity 0.6s ease;
+            transition: transform 0.3s ease;
         }
 
-        .seal-wrapper:hover {
-            transform: scale(1.06);
-        }
+        .seal-wrapper:hover { transform: scale(1.05); }
 
         .gold-seal {
-            width: 140px;
-            height: 140px;
-            background: var(--gold-gradient);
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             border-radius: 50%;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.8), 0 0 25px rgba(212,175,55,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.8);
             display: flex;
             justify-content: center;
             align-items: center;
             border: 4px solid #8c6d27;
-            margin: 0 auto 20px auto;
-            position: relative;
-        }
-
-        .gold-seal::before {
-            content: '';
-            position: absolute;
-            inset: 6px;
-            border: 2px dashed #6b5118;
-            border-radius: 50%;
+            margin: 0 auto 15px auto;
         }
 
         .seal-text {
             font-family: 'Cormorant Garamond', serif;
             color: #3d2c0a;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 600;
-            letter-spacing: 2px;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
         }
 
         .seal-title {
             color: #fcf6ba;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             margin-bottom: 5px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
@@ -151,29 +103,22 @@
             font-size: 0.85rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            opacity: 0.9;
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-            animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-3px); }
-        }
-
-        /* Öffnungs-Animation */
+        /* Öffnungs-Klassen */
         .open .curtain-top { transform: translateY(-100%); }
         .open .curtain-bottom { transform: translateY(100%); }
-        .open .veil-left { transform: translateX(-100%) skewX(-5deg); opacity: 0; }
-        .open .veil-right { transform: translateX(100%) skewX(5deg); opacity: 0; }
-        .open .seal-wrapper { opacity: 0; pointer-events: none; transform: scale(1.2); }
+        .open .veil-left { transform: translateX(-100%); opacity: 0; }
+        .open .veil-right { transform: translateX(100%); opacity: 0; }
+        .open .seal-wrapper { opacity: 0; pointer-events: none; }
 
-        /* --- EINLADUNGS-KARTE --- */
+        /* --- HAUPTINHALT --- */
         .main-wrapper {
             padding: 50px 15px;
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
         }
 
         .main-wrapper.visible {
@@ -184,31 +129,19 @@
         .container {
             max-width: 650px;
             margin: 0 auto;
-            background: var(--card-bg);
-            padding: 50px 35px;
+            background: #ffffff;
+            padding: 45px 30px;
             border-radius: 16px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.08);
             text-align: center;
             border: 1px solid #eae5d8;
-            position: relative;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            inset: 12px;
-            border: 1px solid #d4af37;
-            border-radius: 8px;
-            pointer-events: none;
-            opacity: 0.5;
         }
 
         .names {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 3.2rem;
-            color: var(--primary-color);
+            font-size: 3rem;
+            color: #8a7356;
             margin-bottom: 10px;
-            font-weight: 600;
         }
 
         .subtitle {
@@ -222,115 +155,50 @@
         .divider {
             width: 80px;
             height: 2px;
-            background: var(--gold-gradient);
+            background: #d4af37;
             margin: 25px auto;
         }
 
         .details-box {
             background-color: #faf8f5;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
-            margin: 30px 0;
+            margin: 25px 0;
             text-align: left;
-            border-left: 3px solid var(--accent-color);
+            border-left: 3px solid #d4af37;
         }
 
-        .details-item {
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1rem;
-        }
+        .details-item { margin-bottom: 12px; display: flex; gap: 10px; }
+        .details-item strong { color: #8a7356; }
 
-        .details-item strong { color: var(--primary-color); }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: #8a7356; margin: 30px 0 15px; }
 
-        h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            color: var(--primary-color);
-            margin: 30px 0 15px;
-        }
-
-        /* Formular Styling */
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        label {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #555;
-        }
-
+        form { display: flex; flex-direction: column; gap: 15px; text-align: left; margin-top: 20px; }
+        label { font-size: 0.9rem; font-weight: 500; color: #555; }
         input, select, textarea {
-            width: 100%;
-            padding: 13px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            outline: none;
-            transition: border 0.3s;
-            background: #fff;
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd;
+            border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none;
         }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(138, 115, 86, 0.2);
-        }
-
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
+        input:focus, select:focus, textarea:focus { border-color: #8a7356; }
+        .radio-group { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
+        .radio-option { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .radio-option input { width: auto; }
 
         button {
-            background: var(--gold-gradient);
-            color: #3d2c0a;
-            border: none;
-            padding: 16px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 15px;
+            background: linear-gradient(135deg, #bf953f, #b38728, #aa771c);
+            color: white; border: none; padding: 15px; border-radius: 30px;
+            font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 15px;
             box-shadow: 0 4px 15px rgba(179, 135, 40, 0.3);
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(179, 135, 40, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
+        button:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
 
-<!-- VORHANG, SCHLEIER & SIEGEL OVERLAY -->
+<!-- UMSCHLAG OVERLAY -->
 <div id="envelope-overlay">
     <div class="curtain-panel curtain-top"></div>
     <div class="curtain-panel curtain-bottom"></div>
-    
     <div class="veil-left"></div>
     <div class="veil-right"></div>
     
@@ -338,12 +206,12 @@
         <div class="gold-seal">
             <span class="seal-text">A & L</span>
         </div>
-        <div class="seal-title">Entdecke unsere magische Einladung!</div>
-        <div class="seal-subtitle">Tippe oder klicke das Siegel zum Öffnen</div>
+        <div class="seal-title">Unsere Hochzeitseinladung</div>
+        <div class="seal-subtitle">Klicken zum Öffnen</div>
     </div>
 </div>
 
-<!-- HAUPTINHALT (EINLADUNG) -->
+<!-- HAUPTINHALT -->
 <div class="main-wrapper" id="main-content">
     <div class="container">
         <p class="subtitle">Wir heiraten!</p>
@@ -352,7 +220,7 @@
 
         <div class="divider"></div>
 
-        <p>Wir freuen uns riesig darauf, unseren besonderen Tag gemeinsam mit euch zu feiern!</p>
+        <p>Wir freuen uns riesig darauf, diesen besonderen Tag gemeinsam mit euch zu feiern!</p>
 
         <div class="details-box">
             <div class="details-item">📅 <strong>Datum:</strong> 15. August 2026</div>
@@ -364,44 +232,32 @@
         <div class="divider"></div>
 
         <h2>Rückmeldung (RSVP)</h2>
-        <p style="font-size: 0.9rem; margin-bottom: 15px;">Bitte gebt uns bis zum <strong>01. Juli 2026</strong> Bescheid, ob ihr dabei sein könnt.</p>
+        <p style="font-size: 0.9rem; margin-bottom: 15px;">Bitte gebt uns bis zum <strong>01. Juli 2026</strong> Bescheid.</p>
 
-        <!-- FORMULAR (Ersetze HIER deine Formspree-URL) -->
         <form action="https://formspree.io/f/DEINE_FORMSPREE_ID" method="POST">
             <div>
                 <label for="name">Dein / Eure Namen *</label>
-                <input type="text" id="name" name="Name" placeholder="z.B. Max & Erika Mustermann" required>
+                <input type="text" id="name" name="Name" required>
             </div>
-
             <div>
                 <label>Nimmst du an unserer Feier teil? *</label>
                 <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="Status" value="Zusage" checked required>
-                        Ja, ich/wir kommen gerne!
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="Status" value="Absage">
-                        Nein, leider nicht
-                    </label>
+                    <label class="radio-option"><input type="radio" name="Status" value="Zusage" checked required> Ja, wir kommen gerne!</label>
+                    <label class="radio-option"><input type="radio" name="Status" value="Absage"> Nein, leider nicht</label>
                 </div>
             </div>
-
             <div>
-                <label for="persons">Anzahl der Personen</label>
+                <label for="persons">Anzahl Personen</label>
                 <input type="number" id="persons" name="Personenzahl" min="1" max="5" value="1">
             </div>
-
             <div>
                 <label for="diet">Essenswünsche / Unverträglichkeiten</label>
-                <input type="text" id="diet" name="Essenswunsch" placeholder="z.B. 1x Vegetarisch, Glutenfrei...">
+                <input type="text" id="diet" name="Essenswunsch" placeholder="z.B. Vegetarisch">
             </div>
-
             <div>
                 <label for="message">Nachricht an das Brautpaar</label>
-                <textarea id="message" name="Nachricht" rows="3" placeholder="Deine Wünsche oder Anmerkungen..."></textarea>
+                <textarea id="message" name="Nachricht" rows="3"></textarea>
             </div>
-
             <button type="submit">Antwort absenden</button>
         </form>
     </div>
@@ -409,14 +265,10 @@
 
 <script>
     function openEnvelope() {
-        const overlay = document.getElementById('envelope-overlay');
-        const mainContent = document.getElementById('main-content');
-        
-        overlay.classList.add('open');
-        mainContent.classList.add('visible');
-        
+        document.getElementById('envelope-overlay').classList.add('open');
+        document.getElementById('main-content').classList.add('visible');
         setTimeout(() => {
-            overlay.style.display = 'none';
+            document.getElementById('envelope-overlay').style.display = 'none';
         }, 1200);
     }
 </script>
