@@ -4,21 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hochzeitseinladung - Anna & Lisa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f6f3eb;
+            background-color: #f4f0e6;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.6) 0%, rgba(244,240,230,0.9) 100%),
+                repeating-linear-gradient(45deg, rgba(212,175,55,0.03) 0, rgba(212,175,55,0.03) 10px, transparent 0, transparent 20px);
             color: #4a4a4a;
-            line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* --- UMSCHLAG & OVERLAY --- */
-        #envelope-overlay {
+        /* --- STAGE OVERLAY --- */
+        #stage-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -28,74 +33,141 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f6f3eb;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            background: #f4f0e6;
+            transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        .curtain-panel {
+        /* ENVELOPE BOX */
+        .envelope-container {
+            position: relative;
+            width: 90%;
+            max-width: 650px;
+            height: 480px;
+            background: #22262a;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.3);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Samt & Flap Animation */
+        .flap-top, .flap-bottom {
             position: absolute;
             left: 0;
             width: 100%;
             height: 50.5%;
-            background-color: #23272a;
+            background: #25282d;
+            background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 0);
+            background-size: 16px 16px;
             transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 2;
+        }
+
+        .flap-top {
+            top: 0;
             border-bottom: 2px solid #d4af37;
         }
 
-        .curtain-top { top: 0; }
-        .curtain-bottom { bottom: 0; border-top: 2px solid #d4af37; border-bottom: none; }
+        .flap-bottom {
+            bottom: 0;
+            border-top: 2px solid #d4af37;
+        }
 
-        /* Schleier-Effekt */
-        .veil-left, .veil-right {
+        /* SCHLEIER MIT PERLEN */
+        .veil {
             position: absolute;
             top: 0;
-            width: 35vw;
+            width: 45%;
             height: 100%;
-            background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.25) 70%, rgba(255,255,255,0.05) 100%);
-            z-index: 100000;
+            background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.25) 100%);
+            backdrop-filter: blur(2px);
+            z-index: 3;
             pointer-events: none;
-            transition: transform 1.2s ease, opacity 0.8s ease;
+            transition: transform 1.2s ease, opacity 1s ease;
         }
-        .veil-left { left: 0; }
-        .veil-right { right: 0; }
 
-        /* Siegel & Text */
-        .seal-wrapper {
+        .veil-left { left: 0; border-right: 1px solid rgba(255,255,255,0.4); transform: skewX(-6deg); origin: left top; }
+        .veil-right { right: 0; border-left: 1px solid rgba(255,255,255,0.4); transform: skewX(6deg); origin: right top; }
+
+        /* Perlen auf dem Schleier */
+        .pearl {
             position: absolute;
-            z-index: 100001;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle at 35% 35%, #ffffff, #e0e0e0, #a0a0a0);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        /* GOLD SIEGEL & AURA */
+        .seal-interactive {
+            position: absolute;
+            z-index: 10;
             cursor: pointer;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
 
-        .seal-wrapper:hover { transform: scale(1.05); }
+        .seal-interactive:hover {
+            transform: scale(1.06);
+        }
 
-        .gold-seal {
-            width: 130px;
-            height: 130px;
-            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+        .orbit-rings {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 220px;
+            height: 220px;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(212,175,55,0.5);
             border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.8);
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(212,175,55,0.2);
+            animation: spin 12s linear infinite;
+        }
+
+        .orbit-rings::before {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border: 1.5px dashed rgba(252,246,186,0.6);
+            border-radius: 50%;
+        }
+
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        .gold-seal-3d {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 35% 35%, #ffe89c, #d4af37 40%, #8a6d1c 85%, #59430b 100%);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -4px 8px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.4);
+            border: 5px solid #b38728;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 4px solid #8c6d27;
-            margin: 0 auto 15px auto;
+            margin: 0 auto 20px auto;
+            position: relative;
         }
 
-        .seal-text {
+        .seal-initials {
             font-family: 'Cormorant Garamond', serif;
-            color: #3d2c0a;
-            font-size: 2.5rem;
+            font-size: 3.2rem;
             font-weight: 600;
+            color: #382708;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.6);
+            letter-spacing: 2px;
         }
 
         .seal-title {
             color: #fcf6ba;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.6rem;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            font-size: 1.9rem;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+            margin-bottom: 6px;
         }
 
         .seal-subtitle {
@@ -103,22 +175,31 @@
             font-size: 0.85rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            animation: pulse 2s infinite;
         }
 
-        /* Öffnungs-Klassen */
-        .open .curtain-top { transform: translateY(-100%); }
-        .open .curtain-bottom { transform: translateY(100%); }
-        .open .veil-left { transform: translateX(-100%); opacity: 0; }
-        .open .veil-right { transform: translateX(100%); opacity: 0; }
-        .open .seal-wrapper { opacity: 0; pointer-events: none; }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-3px); }
+        }
 
-        /* --- HAUPTINHALT --- */
+        /* ÖFFNUNGS-ANIMATION */
+        .open .flap-top { transform: translateY(-100%); }
+        .open .flap-bottom { transform: translateY(100%); }
+        .open .veil-left { transform: translateX(-100%) skewX(-6deg); opacity: 0; }
+        .open .veil-right { transform: translateX(100%) skewX(6deg); opacity: 0; }
+        .open .seal-interactive { opacity: 0; pointer-events: none; transform: scale(1.3); }
+
+        /* --- EINLADUNGS-KARTE --- */
         .main-wrapper {
-            padding: 50px 15px;
+            width: 100%;
+            max-width: 650px;
+            padding: 40px 20px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease 0.6s, transform 1.2s ease 0.6s;
         }
 
         .main-wrapper.visible {
@@ -127,19 +208,28 @@
         }
 
         .container {
-            max-width: 650px;
-            margin: 0 auto;
             background: #ffffff;
-            padding: 45px 30px;
+            padding: 50px 35px;
             border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
             text-align: center;
             border: 1px solid #eae5d8;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0.5;
         }
 
         .names {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 3rem;
+            font-size: 3.2rem;
             color: #8a7356;
             margin-bottom: 10px;
         }
@@ -155,59 +245,71 @@
         .divider {
             width: 80px;
             height: 2px;
-            background: #d4af37;
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728);
             margin: 25px auto;
         }
 
         .details-box {
             background-color: #faf8f5;
-            padding: 20px;
+            padding: 25px;
             border-radius: 12px;
-            margin: 25px 0;
+            margin: 30px 0;
             text-align: left;
             border-left: 3px solid #d4af37;
         }
 
-        .details-item { margin-bottom: 12px; display: flex; gap: 10px; }
+        .details-item { margin-bottom: 14px; display: flex; gap: 12px; font-size: 1rem; }
         .details-item strong { color: #8a7356; }
 
-        h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: #8a7356; margin: 30px 0 15px; }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: #8a7356; margin: 30px 0 15px; }
 
-        form { display: flex; flex-direction: column; gap: 15px; text-align: left; margin-top: 20px; }
+        form { display: flex; flex-direction: column; gap: 16px; text-align: left; margin-top: 20px; }
         label { font-size: 0.9rem; font-weight: 500; color: #555; }
         input, select, textarea {
-            width: 100%; padding: 12px 15px; border: 1px solid #ddd;
-            border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none;
+            width: 100%; padding: 13px 15px; border: 1px solid #ddd;
+            border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; background: #fff;
         }
-        input:focus, select:focus, textarea:focus { border-color: #8a7356; }
+        input:focus, select:focus, textarea:focus { border-color: #8a7356; box-shadow: 0 0 5px rgba(138, 115, 86, 0.2); }
         .radio-group { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
         .radio-option { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .radio-option input { width: auto; }
 
         button {
-            background: linear-gradient(135deg, #bf953f, #b38728, #aa771c);
-            color: white; border: none; padding: 15px; border-radius: 30px;
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728);
+            color: #382708; border: none; padding: 16px; border-radius: 30px;
             font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 15px;
             box-shadow: 0 4px 15px rgba(179, 135, 40, 0.3);
         }
-        button:hover { opacity: 0.9; }
+        button:hover { opacity: 0.95; }
     </style>
 </head>
 <body>
 
-<!-- UMSCHLAG OVERLAY -->
-<div id="envelope-overlay">
-    <div class="curtain-panel curtain-top"></div>
-    <div class="curtain-panel curtain-bottom"></div>
-    <div class="veil-left"></div>
-    <div class="veil-right"></div>
-    
-    <div class="seal-wrapper" onclick="openEnvelope()">
-        <div class="gold-seal">
-            <span class="seal-text">A & L</span>
+<!-- UMSCHLAG STAGE -->
+<div id="stage-overlay">
+    <div class="envelope-container" id="envelope-box">
+        <div class="flap-top"></div>
+        <div class="flap-bottom"></div>
+        
+        <div class="veil veil-left">
+            <div class="pearl" style="top:20%; left:40%;"></div>
+            <div class="pearl" style="top:50%; left:70%;"></div>
+            <div class="pearl" style="top:80%; left:30%;"></div>
         </div>
-        <div class="seal-title">Unsere Hochzeitseinladung</div>
-        <div class="seal-subtitle">Klicken zum Öffnen</div>
+        <div class="veil veil-right">
+            <div class="pearl" style="top:30%; right:50%;"></div>
+            <div class="pearl" style="top:65%; right:25%;"></div>
+            <div class="pearl" style="top:85%; right:60%;"></div>
+        </div>
+
+        <div class="seal-interactive" onclick="openEnvelope()">
+            <div class="orbit-rings"></div>
+            <div class="gold-seal-3d">
+                <span class="seal-initials">A & L</span>
+            </div>
+            <div class="seal-title">Entdecke unsere magische Einladung!</div>
+            <div class="seal-subtitle">Tippe oder klicke das Siegel zum Öffnen</div>
+        </div>
     </div>
 </div>
 
@@ -220,7 +322,7 @@
 
         <div class="divider"></div>
 
-        <p>Wir freuen uns riesig darauf, diesen besonderen Tag gemeinsam mit euch zu feiern!</p>
+        <p>Wir freuen uns riesig darauf, unseren besonderen Tag gemeinsam mit euch zu feiern!</p>
 
         <div class="details-box">
             <div class="details-item">📅 <strong>Datum:</strong> 15. August 2026</div>
@@ -232,31 +334,31 @@
         <div class="divider"></div>
 
         <h2>Rückmeldung (RSVP)</h2>
-        <p style="font-size: 0.9rem; margin-bottom: 15px;">Bitte gebt uns bis zum <strong>01. Juli 2026</strong> Bescheid.</p>
+        <p style="font-size: 0.9rem; margin-bottom: 15px;">Bitte gebt uns bis zum <strong>01. Juli 2026</strong> Bescheid, ob ihr dabei sein könnt.</p>
 
         <form action="https://formspree.io/f/DEINE_FORMSPREE_ID" method="POST">
             <div>
                 <label for="name">Dein / Eure Namen *</label>
-                <input type="text" id="name" name="Name" required>
+                <input type="text" id="name" name="Name" placeholder="z.B. Max & Erika Mustermann" required>
             </div>
             <div>
                 <label>Nimmst du an unserer Feier teil? *</label>
                 <div class="radio-group">
-                    <label class="radio-option"><input type="radio" name="Status" value="Zusage" checked required> Ja, wir kommen gerne!</label>
+                    <label class="radio-option"><input type="radio" name="Status" value="Zusage" checked required> Ja, ich/wir kommen gerne!</label>
                     <label class="radio-option"><input type="radio" name="Status" value="Absage"> Nein, leider nicht</label>
                 </div>
             </div>
             <div>
-                <label for="persons">Anzahl Personen</label>
+                <label for="persons">Anzahl der Personen</label>
                 <input type="number" id="persons" name="Personenzahl" min="1" max="5" value="1">
             </div>
             <div>
                 <label for="diet">Essenswünsche / Unverträglichkeiten</label>
-                <input type="text" id="diet" name="Essenswunsch" placeholder="z.B. Vegetarisch">
+                <input type="text" id="diet" name="Essenswunsch" placeholder="z.B. 1x Vegetarisch, Glutenfrei...">
             </div>
             <div>
                 <label for="message">Nachricht an das Brautpaar</label>
-                <textarea id="message" name="Nachricht" rows="3"></textarea>
+                <textarea id="message" name="Nachricht" rows="3" placeholder="Deine Wünsche oder Anmerkungen..."></textarea>
             </div>
             <button type="submit">Antwort absenden</button>
         </form>
@@ -265,11 +367,19 @@
 
 <script>
     function openEnvelope() {
-        document.getElementById('envelope-overlay').classList.add('open');
-        document.getElementById('main-content').classList.add('visible');
+        const envelope = document.getElementById('envelope-box');
+        const overlay = document.getElementById('stage-overlay');
+        const mainContent = document.getElementById('main-content');
+        
+        envelope.classList.add('open');
+        mainContent.classList.add('visible');
+        
         setTimeout(() => {
-            document.getElementById('envelope-overlay').style.display = 'none';
-        }, 1200);
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1200);
+        }, 800);
     }
 </script>
 
