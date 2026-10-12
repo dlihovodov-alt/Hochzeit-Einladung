@@ -185,14 +185,14 @@
     <div class="divider"></div>
 
     <p class="intro-text">
-        Macht direkt ein Foto oder Video oder wählt eure schönsten Aufnahmen aus der Galerie aus!
+        Wählt mehrere Fotos oder Videos aus eurer Galerie aus und teilt sie mit uns!
     </p>
 
     <form id="upload-form" onsubmit="uploadFiles(event)">
         <div class="drop-zone" onclick="document.getElementById('file-input').click()">
             <div class="drop-zone-icon">📸🎥</div>
-            <div class="drop-zone-text">Foto oder Video auswählen</div>
-            <div class="drop-zone-subtext">Tippen, um die Kamera oder Galerie zu öffnen</div>
+            <div class="drop-zone-text">Fotos oder Videos auswählen</div>
+            <div class="drop-zone-subtext">Mehrfachauswahl für Bilder & Videos möglich</div>
             <input type="file" id="file-input" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
         </div>
 
@@ -213,7 +213,7 @@
 </div>
 
 <script>
-    // FÜGE HIER DEINE GEGENIERTE GOOGLE APPS SCRIPT WEB-APP URL EIN:
+    // DEINE GOOGLE APPS SCRIPT WEB-APP URL HIER EINTRAGEN:
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiDI25GnQmFak-mgMq5fnotFn_rBgjxSyGShvje6fNFM-utYGEl7Qh2OxHc4jZqUuk_g/exec";
 
     let selectedFiles = [];
@@ -257,23 +257,28 @@
         status.innerText = "Wird hochgeladen... Bitte warten.";
 
         try {
+            let payloadArray = [];
+
+            // Alle ausgewählten Dateien in Base64 konvertieren
             for (let file of selectedFiles) {
                 const base64 = await convertBase64(file);
-                const payload = {
+                payloadArray.push({
                     file: base64.split(',')[1],
                     mimeType: file.type,
                     fileName: file.name,
                     uploaderName: name
-                };
-
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Verhindert CORS-Blockaden von Google
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
                 });
             }
 
+            // Alles in einem Rutsch an Google Apps Script senden
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payloadArray)
+            });
+
+            // Da no-cors keine Antwort liefert, greift nach erfolgreichem Absenden diese Meldung:
             status.style.color = "#2e7d32";
             status.innerText = "✨ Erfolgreich hochgeladen! Vielen Dank.";
             document.getElementById('upload-form').reset();
