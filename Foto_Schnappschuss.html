@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katharina & Daniel - Live Foto Upload</title>
+    <!-- Einbindung der edlen Schriften: Great Vibes & Cormorant Garamond -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --paper-bg: #fcfbfa;
+            --text-color: #433932;
+            --text-light: #6a5d54;
+            --accent-line: #d8d0c5;
+            --card-bg: #ffffff;
+            --box-bg: #faf8f5;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: var(--paper-bg);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8) 0%, rgba(245,242,237,0.5) 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 620px;
+            padding: 55px 40px;
+            border-radius: 4px;
+            box-shadow: 0 15px 45px rgba(67, 57, 50, 0.08);
+            text-align: center;
+            border: 1px solid var(--accent-line);
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 1px solid var(--accent-line);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .names {
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .script-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.2rem;
+            color: var(--text-color);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: var(--text-color);
+            margin: 25px auto;
+            opacity: 0.4;
+        }
+
+        .intro-text {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--text-color);
+            margin-bottom: 30px;
+        }
+
+        /* UPLOAD / KAMERA ZONE */
+        .drop-zone {
+            background-color: var(--box-bg);
+            border: 2px dashed var(--accent-line);
+            border-radius: 4px;
+            padding: 35px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--text-color);
+            background-color: #f5f1eb;
+        }
+
+        .drop-zone-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-text {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .drop-zone-subtext {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* VORSCHAU-GRID */
+        .preview-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 100%;
+            height: 90px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--accent-line);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* FORMULAR FELDER */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 6px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid var(--accent-line);
+            border-radius: 2px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            outline: none;
+            background: #ffffff;
+            color: var(--text-color);
+        }
+
+        input:focus {
+            border-color: var(--text-color);
+        }
+
+        button {
+            width: 100%;
+            background: var(--text-color);
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            border-radius: 2px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2c2520;
+        }
+
+        .footer-note {
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <p class="names">Katharina & Daniel</p>
+    <h1 class="script-title">Live-Schnappschüsse</h1>
+
+    <div class="divider"></div>
+
+    <p class="intro-text">
+        Macht direkt ein Foto mit eurer Kamera oder wählt eure schönsten Aufnahmen aus der Galerie aus!
+    </p>
+
+    <!-- FORMULAR -->
+    <form id="upload-form" action="https://formspree.io/f/DEINE_FORMSPREE_ID" method="POST" enctype="multipart/form-data">
+        
+        <!-- FOTO / KAMERA AUSWAHL -->
+        <div class="drop-zone" onclick="document.getElementById('file-input').click()">
+            <div class="drop-zone-icon">📸</div>
+            <div class="drop-zone-text">Foto aufnehmen oder auswählen</div>
+            <div class="drop-zone-subtext">Tippen, um die Kamera oder Galerie zu öffnen</div>
+            <!-- WICHTIG: accept="image/*" erlaubt beides (Kamera & Galerie-Auswahl auf Smartphones) -->
+            <input type="file" id="file-input" name="hochzeitsfotos" multiple accept="image/*" onchange="handleFileSelect(event)">
+        </div>
+
+        <!-- BILDVORSCHAU -->
+        <div id="preview-container" class="preview-list"></div>
+
+        <!-- NAME DES GASTES -->
+        <div class="form-group">
+            <label for="uploader-name">Euer Name / Gruß *</label>
+            <input type="text" id="uploader-name" name="Name" placeholder="z.B. Anna von Tisch 3" required>
+        </div>
+
+        <button type="submit">Fotos jetzt senden</button>
+    </form>
+
+    <p class="footer-note">
+        Vielen Dank, dass ihr diesen Tag mit euren Bildern unvergesslich macht!
+    </p>
+</div>
+
+<script>
+    function handleFileSelect(event) {
+        const files = event.target.files;
+        const container = document.getElementById('preview-container');
+        container.innerHTML = '';
+
+        Array.from(files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const item = document.createElement('div');
+                    item.className = 'preview-item';
+                    item.innerHTML = `<img src="${e.target.result}" alt="Vorschau">`;
+                    container.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
