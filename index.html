@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Einladung zu unserer Hochzeit</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Hochzeitseinladung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fdfbf7;
@@ -13,11 +13,8 @@
             --text-color: #4a4a4a;
             --accent-color: #d4af37;
             --seal-color: #a32626;
-            --border-radius: 16px;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--bg-color);
@@ -26,8 +23,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
-        /* --- VORHANG / UMSCHLAG OVERLAY --- */
         #envelope-overlay {
             position: fixed;
             top: 0;
@@ -38,32 +33,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            pointer-events: auto;
         }
-
         .curtain-panel {
             position: absolute;
             left: 0;
             width: 100%;
             height: 50.5%;
-            background-color: #2c2927; /* Edles, dunkles Anthrazit für den Vorhang/Umschlag */
-            background-image: radial-gradient(#3a3633 1px, transparent 0);
-            background-size: 20px 20px;
+            background-color: #2c2927;
             transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        .curtain-top {
-            top: 0;
             border-bottom: 2px solid var(--accent-color);
         }
-
-        .curtain-bottom {
-            bottom: 0;
-            border-top: 2px solid var(--accent-color);
-        }
-
-        /* WACHSSIEGEL */
+        .curtain-top { top: 0; }
+        .curtain-bottom { bottom: 0; top: auto; border-top: 2px solid var(--accent-color); border-bottom: none; }
         .wax-seal-container {
             position: absolute;
             z-index: 10000;
@@ -71,52 +52,168 @@
             text-align: center;
             transition: transform 0.3s ease, opacity 0.5s ease;
         }
-
-        .wax-seal-container:hover {
-            transform: scale(1.08);
-        }
-
+        .wax-seal-container:hover { transform: scale(1.08); }
         .wax-seal {
             width: 110px;
             height: 110px;
             background: radial-gradient(circle at 35% 35%, #c83232, var(--seal-color), #5e1111);
             border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
             display: flex;
             justify-content: center;
             align-items: center;
             border: 3px solid #801b1b;
             margin: 0 auto 15px auto;
-            position: relative;
         }
-
-        .wax-seal::after {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            right: 6px;
-            bottom: 6px;
-            border: 1.5px dashed rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
-        }
-
         .seal-initials {
             font-family: 'Cormorant Garamond', serif;
             color: #f7e7ce;
             font-size: 2.2rem;
             font-weight: 600;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-            letter-spacing: 2px;
         }
-
         .seal-hint {
             color: #fdfbf7;
             font-size: 0.85rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            animation: pulse 2s infinite;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
+        .open .curtain-top { transform: translateY(-100%); }
+        .open .curtain-bottom { transform: translateY(100%); }
+        .open .wax-seal-container { opacity: 0; pointer-events: none; }
+        .main-wrapper {
+            padding: 40px 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+        }
+        .main-wrapper.visible { opacity: 1; transform: translateY(0); }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 45px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        .names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 25px;
+        }
+        .divider {
+            width: 60px;
+            height: 2px;
+            background-color: var(--accent-color);
+            margin: 25px auto;
+        }
+        .details-box {
+            background-color: #faf8f5;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        .details-item { margin-bottom: 12px; display: flex; gap: 12px; }
+        .details-item strong { color: var(--primary-color); }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--primary-color); margin: 30px 0 15px; }
+        form { display: flex; flex-direction: column; gap: 15px; text-align: left; margin-top: 20px; }
+        label { font-size: 0.9rem; font-weight: 500; color: #555; }
+        input, select, textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd;
+            border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-color); }
+        .radio-group { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
+        .radio-option { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .radio-option input { width: auto; }
+        button {
+            background-color: var(--primary-color); color: white; border: none;
+            padding: 15px; border-radius: 30px; font-size: 1rem; font-weight: 500;
+            cursor: pointer; margin-top: 10px;
+        }
+        button:hover { background-color: #735e43; }
+    </style>
+</head>
+<body>
 
-        @keyframes pulse {
+<div id="envelope-overlay">
+    <div class="curtain-panel curtain-top"></div>
+    <div class="curtain-panel curtain-bottom"></div>
+    <div class="wax-seal-container" onclick="openEnvelope()">
+        <div class="wax-seal">
+            <span class="seal-initials">A & L</span>
+        </div>
+        <div class="seal-hint">Klicken zum Öffnen</div>
+    </div>
+</div>
+
+<div class="main-wrapper" id="main-content">
+    <div class="container">
+        <p class="subtitle">Wir heiraten!</p>
+        <h1 class="names">Anna & Lisa</h1>
+        <p style="font-style: italic; color: #666;">„Liebe ist das einzige, was wächst, wenn wir es verschwenden.“</p>
+
+        <div class="divider"></div>
+
+        <p>Wir freuen uns riesig darauf, diesen besonderen Tag gemeinsam mit euch zu feiern!</p>
+
+        <div class="details-box">
+            <div class="details-item">📅 <strong>Datum:</strong> 15. August 2026</div>
+            <div class="details-item">⏰ <strong>Uhrzeit:</strong> 14:00 Uhr</div>
+            <div class="details-item">📍 <strong>Ort:</strong> Schloss Blümchen, Musterstraße 1</div>
+            <div class="details-item">👗 <strong>Dresscode:</strong> Festlich & Elegant</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>Rückmeldung (RSVP)</h2>
+        <p style="font-size: 0.9rem; margin-bottom: 15px;">Bitte gebt uns bis zum <strong>01. Juli 2026</strong> Bescheid.</p>
+
+        <form action="https://formspree.io/f/DEINE_FORMSPREE_ID" method="POST">
+            <div>
+                <label for="name">Dein / Eure Namen *</label>
+                <input type="text" id="name" name="Name" required>
+            </div>
+            <div>
+                <label>Nimmst du an unserer Feier teil? *</label>
+                <div class="radio-group">
+                    <label class="radio-option"><input type="radio" name="Status" value="Zusage" checked required> Ja, wir kommen gerne!</label>
+                    <label class="radio-option"><input type="radio" name="Status" value="Absage"> Nein, leider nicht</label>
+                </div>
+            </div>
+            <div>
+                <label for="persons">Anzahl Personen</label>
+                <input type="number" id="persons" name="Personenzahl" min="1" max="5" value="1">
+            </div>
+            <div>
+                <label for="diet">Essenswünsche / Unverträglichkeiten</label>
+                <input type="text" id="diet" name="Essenswunsch" placeholder="z.B. Vegetarisch">
+            </div>
+            <div>
+                <label for="message">Nachricht an das Brautpaar</label>
+                <textarea id="message" name="Nachricht" rows="3"></textarea>
+            </div>
+            <button type="submit">Antwort absenden</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEnvelope() {
+        document.getElementById('envelope-overlay').classList.add('open');
+        document.getElementById('main-content').classList.add('visible');
+        setTimeout(() => { document.getElementById('envelope-overlay').style.display = 'none'; }, 1200);
+    }
+</script>
+
+</body>
+</html>
