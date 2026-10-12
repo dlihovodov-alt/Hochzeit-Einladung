@@ -324,3 +324,72 @@
                         resolve(compressedFile);
                     }, 'image/jpeg', quality);
                 };
+            };
+        });
+    }
+
+    async function convertBase64(file) {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => resolve(fileReader.result);
+            fileReader.onerror = (error) => reject(error);
+        });
+    }
+
+    async function uploadFiles(event) {
+        event.preventDefault();
+
+        if (selectedFiles.length === 0) {
+            alert("Bitte wähle mindestens ein Foto oder Video aus.");
+            return;
+        }
+
+        const overlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const status = document.getElementById('status');
+        const name = document.getElementById('uploader-name').value;
+
+        overlay.style.display = 'flex';
+
+        try {
+            const total = selectedFiles.length;
+
+            for (let i = 0; i < total; i++) {
+                loadingText.innerText = `Lade Datei ${i + 1} von ${total} hoch...`;
+                
+                const processedFile = await compressImage(selectedFiles[i]);
+                const base64 = await convertBase64(processedFile);
+                
+                const payload = {
+                    file: base64.split(',')[1],
+                    mimeType: processedFile.type,
+                    fileName: processedFile.name,
+                    uploaderName: name
+                };
+
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            overlay.style.display = 'none';
+            status.style.color = "#2e7d32";
+            status.innerText = "✨ Erfolgreich hochgeladen! Vielen Dank.";
+            document.getElementById('upload-form').reset();
+            document.getElementById('preview-container').innerHTML = '';
+            selectedFiles = [];
+
+        } catch (err) {
+            overlay.style.display = 'none';
+            status.style.color = "#c62828";
+            status.innerText = "Fehler beim Upload. Bitte versuche es noch einmal.";
+        }
+    }
+</script>
+
+</body>
+</html>
