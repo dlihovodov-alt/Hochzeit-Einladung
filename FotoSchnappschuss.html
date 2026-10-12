@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katharina & Daniel - Live Foto Upload</title>
-    <!-- Einbindung der edlen Schriften: Great Vibes & Cormorant Garamond -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,7 +60,6 @@
             font-weight: 400;
         }
 
-        /* DYNAMISCH SKALIERENDE ÜBERSCHRIFT FÜR MOBILGERÄTE */
         .script-title {
             font-family: 'Great Vibes', cursive;
             font-size: clamp(2.6rem, 8vw, 4.2rem);
@@ -69,8 +67,6 @@
             font-weight: 400;
             line-height: 1.15;
             margin-bottom: 15px;
-            word-break: keep-all;
-            hyphens: none;
             padding: 0 5px;
         }
 
@@ -89,7 +85,6 @@
             margin-bottom: 25px;
         }
 
-        /* UPLOAD / KAMERA ZONE */
         .drop-zone {
             background-color: var(--box-bg);
             border: 2px dashed var(--accent-line);
@@ -105,29 +100,12 @@
             background-color: #f5f1eb;
         }
 
-        .drop-zone-icon {
-            font-size: 2.3rem;
-            margin-bottom: 8px;
-        }
+        .drop-zone-icon { font-size: 2.3rem; margin-bottom: 8px; }
+        .drop-zone-text { font-size: 1.1rem; color: var(--text-color); margin-bottom: 5px; font-weight: 600; }
+        .drop-zone-subtext { font-size: 0.9rem; color: var(--text-light); font-style: italic; }
 
-        .drop-zone-text {
-            font-size: 1.1rem;
-            color: var(--text-color);
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
+        #file-input { display: none; }
 
-        .drop-zone-subtext {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            font-style: italic;
-        }
-
-        #file-input {
-            display: none;
-        }
-
-        /* VORSCHAU-GRID */
         .preview-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -144,25 +122,14 @@
             border: 1px solid var(--accent-line);
         }
 
-        .preview-item img,
-        .preview-item video {
+        .preview-item img, .preview-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        /* FORMULAR FELDER */
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 1rem;
-            color: var(--text-color);
-            margin-bottom: 6px;
-        }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-size: 1rem; color: var(--text-color); margin-bottom: 6px; }
 
         input[type="text"] {
             width: 100%;
@@ -174,10 +141,6 @@
             outline: none;
             background: #ffffff;
             color: var(--text-color);
-        }
-
-        input:focus {
-            border-color: var(--text-color);
         }
 
         button {
@@ -196,8 +159,13 @@
             transition: background 0.3s ease;
         }
 
-        button:hover {
-            background: #2c2520;
+        button:hover { background: #2c2520; }
+        button:disabled { background: #a8a098; cursor: not-allowed; }
+
+        .status-msg {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
         .footer-note {
@@ -205,19 +173,6 @@
             font-size: 0.95rem;
             color: var(--text-light);
             margin-top: 20px;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 40px 18px;
-            }
-            .container::before {
-                inset: 8px;
-            }
-            .names {
-                font-size: 0.95rem;
-                letter-spacing: 3px;
-            }
         }
     </style>
 </head>
@@ -233,62 +188,112 @@
         Macht direkt ein Foto oder Video oder wählt eure schönsten Aufnahmen aus der Galerie aus!
     </p>
 
-    <!-- WEB3FORMS FORMULAR FÜR DIE HOCHZEITSFOTOS & VIDEOS -->
-    <form id="upload-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
-        
-        <!-- HIER DEINEN WEB3FORMS ACCESS KEY EINFÜGEN -->
-        <input type="hidden" name="access_key" value="aeb2c8ed-b5da-4cde-b281-903525fe7940">
-        
-        <!-- FOTO / VIDEO / KAMERA AUSWAHL -->
+    <form id="upload-form" onsubmit="uploadFiles(event)">
         <div class="drop-zone" onclick="document.getElementById('file-input').click()">
             <div class="drop-zone-icon">📸🎥</div>
-            <div class="drop-zone-text">Foto oder Video aufnehmen / auswählen</div>
+            <div class="drop-zone-text">Foto oder Video auswählen</div>
             <div class="drop-zone-subtext">Tippen, um die Kamera oder Galerie zu öffnen</div>
-            <input type="file" id="file-input" name="attachment" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
+            <input type="file" id="file-input" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
         </div>
 
-        <!-- BILD- & VIDEOVORSCHAU -->
         <div id="preview-container" class="preview-list"></div>
 
-        <!-- NAME DES GASTES -->
         <div class="form-group">
             <label for="uploader-name">Euer Name / Gruß *</label>
-            <input type="text" id="uploader-name" name="Name" placeholder="z.B. Anna von Tisch 3" required>
+            <input type="text" id="uploader-name" placeholder="z.B. Anna von Tisch 3" required>
         </div>
 
-        <button type="submit">Medien jetzt senden</button>
+        <button type="submit" id="submit-btn">Medien jetzt senden</button>
+        <div id="status" class="status-msg"></div>
     </form>
 
     <p class="footer-note">
-        Vielen Dank, dass ihr diesen Tag mit euren Bildern und Videos unvergesslich macht!
+        Vielen Dank, dass ihr diesen Tag mit euren Bildern unvergesslich macht!
     </p>
 </div>
 
 <script>
+    // FÜGE HIER DEINE GEGENIERTE GOOGLE APPS SCRIPT WEB-APP URL EIN:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiDI25GnQmFak-mgMq5fnotFn_rBgjxSyGShvje6fNFM-utYGEl7Qh2OxHc4jZqUuk_g/exec";
+
+    let selectedFiles = [];
+
     function handleFileSelect(event) {
-        const files = event.target.files;
+        selectedFiles = Array.from(event.target.files);
         const container = document.getElementById('preview-container');
         container.innerHTML = '';
 
-        Array.from(files).forEach(file => {
+        selectedFiles.forEach(file => {
             const item = document.createElement('div');
             item.className = 'preview-item';
 
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (file.type.startsWith('image/')) {
                     item.innerHTML = `<img src="${e.target.result}" alt="Vorschau">`;
-                    container.appendChild(item);
-                };
-                reader.readAsDataURL(file);
-            } else if (file.type.startsWith('video/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
+                } else if (file.type.startsWith('video/')) {
                     item.innerHTML = `<video src="${e.target.result}"></video>`;
-                    container.appendChild(item);
+                }
+                container.appendChild(item);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function uploadFiles(event) {
+        event.preventDefault();
+
+        if (selectedFiles.length === 0) {
+            alert("Bitte wähle mindestens ein Foto oder Video aus.");
+            return;
+        }
+
+        const btn = document.getElementById('submit-btn');
+        const status = document.getElementById('status');
+        const name = document.getElementById('uploader-name').value;
+
+        btn.disabled = true;
+        status.style.color = "var(--text-color)";
+        status.innerText = "Wird hochgeladen... Bitte warten.";
+
+        try {
+            for (let file of selectedFiles) {
+                const base64 = await convertBase64(file);
+                const payload = {
+                    file: base64.split(',')[1],
+                    mimeType: file.type,
+                    fileName: file.name,
+                    uploaderName: name
                 };
-                reader.readAsDataURL(file);
+
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Verhindert CORS-Blockaden von Google
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
             }
+
+            status.style.color = "#2e7d32";
+            status.innerText = "✨ Erfolgreich hochgeladen! Vielen Dank.";
+            document.getElementById('upload-form').reset();
+            document.getElementById('preview-container').innerHTML = '';
+            selectedFiles = [];
+
+        } catch (err) {
+            status.style.color = "#c62828";
+            status.innerText = "Fehler beim Upload. Bitte versuche es noch einmal.";
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    function convertBase64(file) {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => resolve(fileReader.result);
+            fileReader.onerror = (error) => reject(error);
         });
     }
 </script>
