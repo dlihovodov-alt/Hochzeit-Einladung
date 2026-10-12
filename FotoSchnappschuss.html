@@ -174,11 +174,60 @@
             color: var(--text-light);
             margin-top: 20px;
         }
+
+        /* WARTESEITE / OVERLAY STYLING */
+        #loading-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(252, 251, 250, 0.95);
+            z-index: 10;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--accent-line);
+            border-top: 3px solid var(--text-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .loading-sub {
+            font-size: 1.05rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
+    
+    <!-- VOLLBILD WARTESEITE / LADE-OVERLAY -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-title" id="loading-text">Eure Medien werden hochgeladen...</div>
+        <div class="loading-sub">Bitte die Seite nicht schließen. Gleich geschafft! ✨</div>
+    </div>
+
     <p class="names">Katharina & Daniel</p>
     <h1 class="script-title">Live-Schnappschüsse</h1>
 
@@ -192,7 +241,7 @@
         <div class="drop-zone" onclick="document.getElementById('file-input').click()">
             <div class="drop-zone-icon">📸🎥</div>
             <div class="drop-zone-text">Fotos oder Videos auswählen</div>
-            <div class="drop-zone-subtext">Optimierter & schneller Upload</div>
+            <div class="drop-zone-subtext">Mehrfachauswahl für Bilder & Videos möglich</div>
             <input type="file" id="file-input" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
         </div>
 
@@ -240,11 +289,9 @@
         });
     }
 
-    // Funktion zum Komprimieren von Bildern im Browser vor dem Senden
     function compressImage(file, maxWidth = 1920, quality = 0.8) {
         return new Promise((resolve) => {
             if (!file.type.startsWith('image/')) {
-                // Videos unkomprimiert durchlassen
                 resolve(file);
                 return;
             }
@@ -289,20 +336,22 @@
             return;
         }
 
-        const btn = document.getElementById('submit-btn');
+        const overlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
         const status = document.getElementById('status');
         const name = document.getElementById('uploader-name').value;
 
-        btn.disabled = true;
-        status.style.color = "var(--text-color)";
-        status.innerText = "Komprimiere & lade hoch... Bitte warten.";
+        // Overlay einblenden
+        overlay.style.display = 'flex';
+        loadingText.innerText = "Bereite Medien vor...";
 
         try {
             let payloadArray = [];
+            const total = selectedFiles.length;
 
-            for (let file of selectedFiles) {
-                // Bild vorab verkleinern für rasanten Speed
-                const processedFile = await compressImage(file);
+            for (let i = 0; i < total; i++) {
+                loadingText.innerText = `Verarbeite Datei ${i + 1} von ${total}...`;
+                const processedFile = await compressImage(selectedFiles[i]);
                 const base64 = await convertBase64(processedFile);
                 
                 payloadArray.push({
@@ -313,6 +362,8 @@
                 });
             }
 
+            loadingText.innerText = "Lade in Google Drive hoch...";
+
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -320,29 +371,25 @@
                 body: JSON.stringify(payloadArray)
             });
 
+            // Overlay ausblenden und Erfolg anzeigen
+            overlay.style.display = 'none';
             status.style.color = "#2e7d32";
             status.innerText = "✨ Erfolgreich hochgeladen! Vielen Dank.";
             document.getElementById('upload-form').reset();
             document.getElementById('preview-container').innerHTML = '';
             selectedFiles = [];
 
-        } catch (err) {
+        }Cry { ... } catch (err) {
+            overlay.style.display = 'none';
             status.style.color = "#c62828";
             status.innerText = "Fehler beim Upload. Bitte versuche es noch einmal.";
-        } finally {
-            btn.disabled = false;
         }
     }
 
-    function convertBase64(file) {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            fileReader.onload = () => resolve(fileReader.result);
-            fileReader.onerror = (error) => reject(error);
-        });
+    // Kleine Korrektur für den try-catch Block (CATCH syntax)
+    async function uploadFilesSafe(event) {
+        try {
+            await uploadFiles(event);
+        } catch(e) {}
     }
 </script>
-
-</body>
-</html>
