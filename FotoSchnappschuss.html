@@ -144,7 +144,8 @@
             border: 1px solid var(--accent-line);
         }
 
-        .preview-item img {
+        .preview-item img,
+        .preview-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -229,21 +230,21 @@
     <div class="divider"></div>
 
     <p class="intro-text">
-        Macht direkt ein Foto mit eurer Kamera oder wählt eure schönsten Aufnahmen aus der Galerie aus!
+        Macht direkt ein Foto oder Video oder wählt eure schönsten Aufnahmen aus der Galerie aus!
     </p>
 
-    <!-- FORMSPREE FORMULAR FOR DIE HOCHZEITSFOTOS -->
+    <!-- FORMSPREE FORMULAR FÜR DIE HOCHZEITSFOTOS & VIDEOS -->
     <form id="upload-form" action="https://formspree.io/f/mbgdkeok" method="POST" enctype="multipart/form-data">
         
-        <!-- FOTO / KAMERA AUSWAHL -->
+        <!-- FOTO / VIDEO / KAMERA AUSWAHL -->
         <div class="drop-zone" onclick="document.getElementById('file-input').click()">
-            <div class="drop-zone-icon">📸</div>
-            <div class="drop-zone-text">Foto aufnehmen oder auswählen</div>
+            <div class="drop-zone-icon">📸🎥</div>
+            <div class="drop-zone-text">Foto oder Video aufnehmen / auswählen</div>
             <div class="drop-zone-subtext">Tippen, um die Kamera oder Galerie zu öffnen</div>
-            <input type="file" id="file-input" name="hochzeitsfotos" multiple accept="image/*" onchange="handleFileSelect(event)">
+            <input type="file" id="file-input" name="hochzeitsmedien" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
         </div>
 
-        <!-- BILDVORSCHAU -->
+        <!-- BILD- & VIDEOVORSCHAU -->
         <div id="preview-container" class="preview-list"></div>
 
         <!-- NAME DES GASTES -->
@@ -252,11 +253,11 @@
             <input type="text" id="uploader-name" name="Name" placeholder="z.B. Anna von Tisch 3" required>
         </div>
 
-        <button type="submit">Fotos jetzt senden</button>
+        <button type="submit">Medien jetzt senden</button>
     </form>
 
     <p class="footer-note">
-        Vielen Dank, dass ihr diesen Tag mit euren Bildern unvergesslich macht!
+        Vielen Dank, dass ihr diesen Tag mit euren Bildern und Videos unvergesslich macht!
     </p>
 </div>
 
@@ -267,12 +268,20 @@
         container.innerHTML = '';
 
         Array.from(files).forEach(file => {
+            const item = document.createElement('div');
+            item.className = 'preview-item';
+
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const item = document.createElement('div');
-                    item.className = 'preview-item';
                     item.innerHTML = `<img src="${e.target.result}" alt="Vorschau">`;
+                    container.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type.startsWith('video/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    item.innerHTML = `<video src="${e.target.result}"></video>`;
                     container.appendChild(item);
                 };
                 reader.readAsDataURL(file);
