@@ -108,53 +108,64 @@
 
         .preview-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .preview-item {
             position: relative;
             width: 100%;
-            height: 80px;
+            height: 85px;
             border-radius: 4px;
-            overflow: hidden;
+            overflow: visible;
             border: 1px solid var(--accent-line);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            background: #eee;
         }
 
         .preview-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+            border-radius: 3px;
         }
 
-        /* ABSOLUT RUNDER LÖSCH-BUTTON MIT ZENTRIERTEM X */
+        /* EXAKT RUNDER KREIS MIT PERFEKT MITTIGEM X */
         .delete-btn {
             position: absolute;
-            top: 3px;
-            right: 3px;
+            top: -6px;
+            right: -6px;
             width: 22px;
             height: 22px;
-            background: rgba(67, 57, 50, 0.9);
+            background: #433932;
             color: #ffffff;
-            border: none;
+            border: 2px solid #ffffff;
             border-radius: 50%;
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0;
+            margin: 0;
             line-height: 1;
-            z-index: 5;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .delete-btn span {
+            display: block;
+            margin-top: -1px; /* Optischer Ausgleich für exakte Vertikalzentrierung */
         }
 
         .delete-btn:hover {
             background: #c62828;
+            transform: scale(1.1);
         }
 
         .form-group { margin-bottom: 20px; text-align: left; }
@@ -172,7 +183,7 @@
             color: var(--text-color);
         }
 
-        button {
+        button[type="submit"] {
             width: 100%;
             background: var(--text-color);
             color: #ffffff;
@@ -188,7 +199,7 @@
             transition: background 0.3s ease;
         }
 
-        button:hover { background: #2c2520; }
+        button[type="submit"]:hover { background: #2c2520; }
         button:disabled { background: #a8a098; cursor: not-allowed; }
 
         .status-msg {
@@ -204,12 +215,13 @@
             margin-top: 20px;
         }
 
+        /* LADE-OVERLAY */
         #loading-overlay {
             display: none;
             position: absolute;
             inset: 0;
             background: rgba(252, 251, 250, 0.95);
-            z-index: 10;
+            z-index: 20;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -261,16 +273,15 @@
     <div class="divider"></div>
 
     <p class="intro-text">
-        Macht direkt ein Live-Foto mit eurer Kamera und fügt es hinzu!
+        Macht direkt Live-Fotos mit eurer Kamera und teilt sie mit uns!
     </p>
 
     <form id="upload-form" onsubmit="uploadFiles(event)">
-        <!-- capture="environment" erzwingt die direkte Nutzung der Kamera -->
         <div class="drop-zone" onclick="document.getElementById('file-input').click()">
             <div class="drop-zone-icon">📸</div>
             <div class="drop-zone-text">Live-Foto aufnehmen</div>
             <div class="drop-zone-subtext">Öffnet direkt die Handykamera</div>
-            <input type="file" id="file-input" multiple accept="image/*" capture="environment" onchange="handleFileSelect(event)">
+            <input type="file" id="file-input" accept="image/*" capture="environment" onchange="handleFileSelect(event)">
         </div>
 
         <div id="preview-container" class="preview-list"></div>
@@ -296,15 +307,16 @@
     let selectedFiles = [];
 
     function handleFileSelect(event) {
-        const newFiles = Array.from(event.target.files);
+        const files = Array.from(event.target.files);
 
-        newFiles.forEach(file => {
-            if (!file.type.startsWith('image/')) return;
-            selectedFiles.push(file);
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                selectedFiles.push(file);
+            }
         });
 
         renderPreviews();
-        event.target.value = '';
+        event.target.value = ''; // Erlaubt mehrmaliges Auslösen der Kamera
     }
 
     function renderPreviews() {
@@ -315,15 +327,27 @@
             const item = document.createElement('div');
             item.className = 'preview-item';
 
+            const img = document.createElement('img');
+            img.alt = "Vorschau";
+
+            const btn = document.createElement('button');
+            btn.type = "button";
+            btn.className = "delete-btn";
+            btn.innerHTML = "<span>&times;</span>";
+            btn.title = "Entfernen";
+            btn.onclick = function(e) {
+                e.stopPropagation();
+                removeFile(index);
+            };
+
             const reader = new FileReader();
             reader.onload = function(e) {
-                item.innerHTML = `
-                    <img src="${e.target.result}" alt="Vorschau">
-                    <button type="button" class="delete-btn" onclick="removeFile(${index})" title="Entfernen">&times;</button>
-                `;
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
 
+            item.appendChild(img);
+            item.appendChild(btn);
             container.appendChild(item);
         });
     }
@@ -353,4 +377,84 @@
                     canvas.width = width;
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
-                    ctx.drawImage
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        const compressedFile = new File([blob], file.name || "kamera_foto.jpg", {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        resolve(compressedFile);
+                    }, 'image/jpeg', quality);
+                };
+            };
+        });
+    }
+
+    function convertBase64(file) {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => resolve(fileReader.result);
+            fileReader.onerror = (error) => reject(error);
+        });
+    }
+
+    async function uploadFiles(event) {
+        event.preventDefault();
+
+        if (selectedFiles.length === 0) {
+            alert("Bitte nimm mindestens ein Foto auf.");
+            return;
+        }
+
+        const overlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const status = document.getElementById('status');
+        const name = document.getElementById('uploader-name').value;
+
+        overlay.style.display = 'flex';
+
+        try {
+            const total = selectedFiles.length;
+
+            for (let i = 0; i < total; i++) {
+                loadingText.innerText = `Komprimiere Bild ${i + 1} von ${total}...`;
+                
+                const processedFile = await compressImage(selectedFiles[i]);
+                const base64 = await convertBase64(processedFile);
+                
+                const payload = {
+                    file: base64.split(',')[1],
+                    mimeType: processedFile.type,
+                    fileName: processedFile.name,
+                    uploaderName: name
+                };
+
+                loadingText.innerText = `Lade Bild ${i + 1} von ${total} hoch...`;
+
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            overlay.style.display = 'none';
+            status.style.color = "#2e7d32";
+            status.innerText = "✨ Erfolgreich hochgeladen! Vielen Dank.";
+            document.getElementById('upload-form').reset();
+            document.getElementById('preview-container').innerHTML = '';
+            selectedFiles = [];
+
+        } catch (err) {
+            overlay.style.display = 'none';
+            status.style.color = "#c62828";
+            status.innerText = "Fehler beim Upload. Bitte versuche es noch einmal.";
+        }
+    }
+</script>
+
+</body>
+</html>
