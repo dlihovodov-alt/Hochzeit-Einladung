@@ -122,7 +122,7 @@
             border: 1px solid var(--accent-line);
         }
 
-        .preview-item img, .preview-item video {
+        .preview-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -224,25 +224,26 @@
     <!-- VOLLBILD WARTESEITE / LADE-OVERLAY -->
     <div id="loading-overlay">
         <div class="spinner"></div>
-        <div class="loading-title" id="loading-text">Eure Medien werden hochgeladen...</div>
-        <div class="loading-sub">Bitte die Seite nicht schließen. Gleich geschafft! ✨</div>
+        <div class="loading-title" id="loading-text">Eure Schnappschüsse werden hochgeladen...</div>
+        <div class="loading-sub">Gleich geschafft! ✨</div>
     </div>
 
-    <p class="names">1Katharina & Daniel</p>
+    <p class="names">Katharina & Daniel</p>
     <h1 class="script-title">Live-Schnappschüsse</h1>
 
     <div class="divider"></div>
 
     <p class="intro-text">
-        Wählt mehrere Fotos oder Videos aus eurer Galerie aus und teilt sie mit uns!
+        Macht direkt ein Foto mit der Kamera oder wählt eure schönsten Aufnahmen aus!
     </p>
 
     <form id="upload-form" onsubmit="uploadFiles(event)">
+        <!-- Nur accept="image/*" erzwingt Kamera/Bilder -->
         <div class="drop-zone" onclick="document.getElementById('file-input').click()">
-            <div class="drop-zone-icon">📸🎥</div>
-            <div class="drop-zone-text">Fotos oder Videos auswählen</div>
-            <div class="drop-zone-subtext">Mehrfachauswahl für Bilder & Videos möglich</div>
-            <input type="file" id="file-input" multiple accept="image/*,video/*" onchange="handleFileSelect(event)">
+            <div class="drop-zone-icon">📸</div>
+            <div class="drop-zone-text">Foto aufnehmen oder auswählen</div>
+            <div class="drop-zone-subtext">Öffnet direkt die Kamera oder Galerie</div>
+            <input type="file" id="file-input" multiple accept="image/*" capture="environment" onchange="handleFileSelect(event)">
         </div>
 
         <div id="preview-container" class="preview-list"></div>
@@ -252,7 +253,7 @@
             <input type="text" id="uploader-name" placeholder="z.B. Anna von Tisch 3" required>
         </div>
 
-        <button type="submit" id="submit-btn">Medien jetzt senden</button>
+        <button type="submit" id="submit-btn">Fotos jetzt senden</button>
         <div id="status" class="status-msg"></div>
     </form>
 
@@ -273,29 +274,23 @@
         container.innerHTML = '';
 
         selectedFiles.forEach(file => {
+            if (!file.type.startsWith('image/')) return; // Nur Bilder erlauben
+
             const item = document.createElement('div');
             item.className = 'preview-item';
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                if (file.type.startsWith('image/')) {
-                    item.innerHTML = `<img src="${e.target.result}" alt="Vorschau">`;
-                } else if (file.type.startsWith('video/')) {
-                    item.innerHTML = `<video src="${e.target.result}"></video>`;
-                }
+                item.innerHTML = `<img src="${e.target.result}" alt="Vorschau">`;
                 container.appendChild(item);
             };
             reader.readAsDataURL(file);
         });
     }
 
-    function compressImage(file, maxWidth = 1920, quality = 0.8) {
+    // Automatisches Verkleinern der Bilder für rasanten Speed
+    function compressImage(file, maxWidth = 1600, quality = 0.75) {
         return new Promise((resolve) => {
-            if (!file.type.startsWith('image/')) {
-                resolve(file);
-                return;
-            }
-
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = (event) => {
@@ -328,7 +323,7 @@
         });
     }
 
-    async function convertBase64(file) {
+    function convertBase64(file) {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file);
@@ -341,14 +336,14 @@
         event.preventDefault();
 
         if (selectedFiles.length === 0) {
-            alert("Bitte wähle mindestens ein Foto oder Video aus.");
+            alert("Bitte wähle mindestens ein Foto aus.");
             return;
         }
 
         const overlay = document.getElementById('loading-overlay');
         const loadingText = document.getElementById('loading-text');
         const status = document.getElementById('status');
-        const name = document.getElementById('uploader-name').value;
+        const name = document.getElementById('uploader-name-input') ? document.getElementById('uploader-name-input').value : document.getElementById('uploader-name').value;
 
         overlay.style.display = 'flex';
 
@@ -356,7 +351,7 @@
             const total = selectedFiles.length;
 
             for (let i = 0; i < total; i++) {
-                loadingText.innerText = `Lade Datei ${i + 1} von ${total} hoch...`;
+                loadingText.innerText = `Komprimiere Bild ${i + 1} von ${total}...`;
                 
                 const processedFile = await compressImage(selectedFiles[i]);
                 const base64 = await convertBase64(processedFile);
@@ -367,6 +362,8 @@
                     fileName: processedFile.name,
                     uploaderName: name
                 };
+
+                loadingText.innerText = `Lade Bild ${i + 1} von ${total} hoch...`;
 
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
