@@ -3,36 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hochzeitseinladung - Anna & Lisa</title>
-    <!-- Google Fonts for Luxury Typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-    
+    <title>Hochzeitseinladung - Katharina & Daniel</title>
+    <!-- Einbindung der edlen Schriften: Great Vibes (für geschwungene Handschrift) & Cormorant Garamond -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --gold-gradient: linear-gradient(135deg, #fce0a2 0%, #d4af37 35%, #927424 70%, #fef3c7 85%, #735712 100%);
-            --wax-gradient: radial-gradient(circle at 35% 30%, #fff1c5 0%, #e3bd4d 22%, #b89128 50%, #7d5e13 80%, #463307 100%);
-            --stamp-gradient: radial-gradient(circle at 40% 35%, #fadc8c 0%, #cba232 45%, #8c6813 85%, #594107 100%);
-            --bg-creme: #f9f6f0;
-            --text-dark: #3a332a;
-            --gold-accent: #b38e36;
+            --paper-bg: #fcfbfa;
+            --text-color: #433932;
+            --text-light: #6a5d54;
+            --accent-line: #d8d0c5;
+            --seal-bg: #f5f3ef;
+            --seal-border: #e3ded6;
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-creme);
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, rgba(244, 239, 228, 0.95) 100%),
-                repeating-linear-gradient(45deg, rgba(179, 142, 54, 0.02) 0, rgba(179, 142, 54, 0.02) 12px, transparent 0, transparent 24px);
-            color: var(--text-dark);
+            font-family: 'Cormorant Garamond', serif;
+            background-color: var(--paper-bg);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8) 0%, rgba(245,242,237,0.5) 100%);
+            color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
@@ -40,6 +30,7 @@
             align-items: center;
         }
 
+        /* --- STAGE OVERLAY --- */
         #stage-overlay {
             position: fixed;
             top: 0;
@@ -50,183 +41,219 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #17191c;
+            background: var(--paper-bg);
             transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        /* Envelope Box Wrapper */
         .envelope-container {
             position: relative;
-            width: 92%;
-            max-width: 680px;
-            height: 520px;
-            background: #1e2124;
-            border-radius: 16px;
-            box-shadow: 
-                0 30px 80px rgba(0, 0, 0, 0.7),
-                0 0 0 1px rgba(212, 175, 55, 0.25),
-                inset 0 0 30px rgba(0, 0, 0, 0.8);
+            width: 90%;
+            max-width: 620px;
+            height: 720px;
+            max-height: 90vh;
+            background: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 15px 45px rgba(67, 57, 50, 0.08), 0 0 0 1px rgba(216, 208, 197, 0.4);
             overflow: hidden;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
+            padding: 50px 20px;
+            text-align: center;
         }
 
-        /* Vertical Curtain Flaps (Left & Right Split) */
+        /* UMSCHLAG-FALTUNG (LINKS & RECHTS SENKRECHT) */
         .flap-left, .flap-right {
             position: absolute;
             top: 0;
             width: 50.5%;
             height: 100%;
-            background: #23272b;
-            background-image: 
-                radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0),
-                linear-gradient(to right, rgba(0,0,0,0.3), transparent 20%, transparent 80%, rgba(0,0,0,0.5));
-            background-size: 20px 20px, 100% 100%;
-            transition: transform 1.3s cubic-bezier(0.77, 0, 0.175, 1);
+            background: #ffffff;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
             z-index: 2;
         }
 
         .flap-left {
             left: 0;
-            border-right: 1px solid rgba(212, 175, 55, 0.6);
-            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+            border-right: 1px solid var(--accent-line);
         }
 
         .flap-right {
             right: 0;
-            border-left: 1px solid rgba(212, 175, 55, 0.6);
-            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+            border-left: 1px solid var(--accent-line);
         }
 
+        /* SCHLEIER OVERLAY */
         .veil {
             position: absolute;
             top: 0;
             width: 50%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.18) 100%);
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
+            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.5) 100%);
+            backdrop-filter: blur(1.5px);
             z-index: 3;
             pointer-events: none;
-            transition: transform 1.3s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.1s ease;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease;
         }
 
-        .veil-left { left: 0; border-right: 1px solid rgba(255, 255, 255, 0.3); }
-        .veil-right { right: 0; border-left: 1px solid rgba(255, 255, 255, 0.3); }
+        .veil-left { left: 0; }
+        .veil-right { right: 0; }
 
-        .pearl {
-            position: absolute;
-            width: 9px;
-            height: 9px;
-            background: radial-gradient(circle at 35% 35%, #ffffff, #f0ebd9 60%, #b8b19d 100%);
-            border-radius: 50%;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), inset -1px -1px 2px rgba(0,0,0,0.2);
+        /* HEADER TEXTE AUF DEM UMSCHLAG */
+        .envelope-header {
+            z-index: 4;
+            pointer-events: none;
+            margin-top: 10px;
         }
 
+        .header-names {
+            font-size: 1.1rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-color);
+            font-weight: 400;
+            margin-bottom: 25px;
+        }
+
+        .main-script-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.8rem;
+            color: var(--text-color);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .date-section {
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .date-day {
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .date-full {
+            font-style: italic;
+            font-size: 1.4rem;
+            color: var(--text-color);
+        }
+
+        .envelope-footer {
+            z-index: 4;
+            pointer-events: none;
+            margin-bottom: 15px;
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        /* WEISSES PERLMUTT-WACHSSIEGEL */
         .seal-interactive {
             position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             z-index: 10;
             cursor: pointer;
             text-align: center;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            outline: none;
-            user-select: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .seal-interactive:hover {
-            transform: scale(1.06);
+            transform: translate(-50%, -50%) scale(1.06);
         }
 
-        .seal-interactive:active {
-            transform: scale(0.98);
+        .pearl-wax-seal {
+            width: 125px;
+            height: 155px;
+            margin: 0 auto;
+            position: relative;
+            background: radial-gradient(circle at 40% 30%, #ffffff 0%, #f7f5f0 45%, #e8e3d8 80%, #d6cebf 100%);
+            border-radius: 50% 50% 48% 52% / 52% 48% 52% 48%;
+            box-shadow: 
+                0 10px 25px rgba(67, 57, 50, 0.15), 
+                inset 0 2px 5px rgba(255, 255, 255, 0.9),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--seal-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Photorealistic Wax Base SVG Styling */
-        .wax-seal-svg {
-            width: 175px;
-            height: 175px;
-            margin: 0 auto 12px auto;
-            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.75)) drop-shadow(0 4px 10px rgba(0,0,0,0.5));
-            transition: filter 0.3s ease;
+        .seal-inner-oval {
+            width: 90px;
+            height: 120px;
+            border-radius: 50%;
+            border: 1px solid rgba(106, 93, 84, 0.35);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.04);
         }
 
-        .seal-interactive:hover .wax-seal-svg {
-            filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+        .seal-inner-oval::before {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border: 1px solid rgba(106, 93, 84, 0.25);
+            border-radius: 50%;
         }
 
-        /* SVG Gold Gradients and Shadows */
-        .wax-outer-rim {
-            fill: url(#waxGradient);
-            filter: url(#bevelFilter);
+        .seal-initials-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            line-height: 0.9;
         }
 
-        .wax-inner-bed {
-            fill: url(#stampGradient);
+        .initial-k {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            margin-right: 15px;
         }
 
-        .gold-line {
-            fill: none;
-            stroke: url(#goldMetal);
-            stroke-width: 1.5;
-            opacity: 0.85;
-        }
-
-        .seal-initials-svg {
+        .initial-amp {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 42px;
-            font-weight: 600;
-            fill: url(#textGoldGradient);
-            letter-spacing: 2px;
-            text-anchor: middle;
-            dominant-baseline: central;
-            filter: url(#embossText);
+            font-style: italic;
+            font-size: 1.1rem;
+            margin: -10px 0;
+            color: var(--text-light);
         }
 
-        /* Seal Titles & Subtitles */
-        .seal-title {
-            color: #fdf2d0;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.3);
-            margin-bottom: 6px;
+        .initial-d {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            margin-left: 15px;
         }
 
-        .seal-subtitle {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 400;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-            animation: breathe 2.5s ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-            0%, 100% { opacity: 0.7; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-2px); }
-        }
-
+        /* ANIMATION BEIM ÖFFNEN */
         .open .flap-left { transform: translateX(-100%); }
         .open .flap-right { transform: translateX(100%); }
         .open .veil-left { transform: translateX(-100%); opacity: 0; }
         .open .veil-right { transform: translateX(100%); opacity: 0; }
-        .open .seal-interactive { 
-            opacity: 0; 
-            pointer-events: none; 
-            transform: scale(1.25);
-            transition: opacity 0.6s ease, transform 0.8s ease; 
-        }
+        .open .seal-interactive { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(1.3); }
 
+        /* --- EINLADUNGS-KARTE (HAUPTINHALT) --- */
         .main-wrapper {
             width: 100%;
-            max-width: 680px;
-            padding: 50px 20px;
+            max-width: 620px;
+            padding: 40px 20px;
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1.2s ease 0.5s, transform 1.2s ease 0.5s;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease 0.6s, transform 1.2s ease 0.6s;
         }
 
         .main-wrapper.visible {
@@ -234,331 +261,189 @@
             transform: translateY(0);
         }
 
-        .card-container {
+        .container {
             background: #ffffff;
-            padding: 60px 40px;
-            border-radius: 20px;
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.06),
-                0 2px 10px rgba(0,0,0,0.02);
+            padding: 55px 40px;
+            border-radius: 4px;
+            box-shadow: 0 15px 40px rgba(67, 57, 50, 0.06);
             text-align: center;
-            border: 1px solid #eae3d2;
+            border: 1px solid var(--accent-line);
             position: relative;
         }
 
-        .card-container::before {
+        .container::before {
             content: '';
             position: absolute;
-            inset: 14px;
-            border: 1px solid #d4af37;
-            border-radius: 12px;
+            inset: 12px;
+            border: 1px solid var(--accent-line);
             pointer-events: none;
-            opacity: 0.45;
+            opacity: 0.6;
         }
 
         .names {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3.5rem;
-            font-weight: 600;
-            color: #7d6542;
-            margin-bottom: 8px;
-            line-height: 1.1;
-        }
-
-        .subtitle {
-            font-size: 0.9rem;
+            font-size: 1.2rem;
             letter-spacing: 5px;
             text-transform: uppercase;
-            color: #a3895e;
-            margin-bottom: 25px;
-            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-weight: 400;
         }
 
-        .quote {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1.25rem;
-            color: #666;
-            margin-bottom: 25px;
+        .card-script-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.2rem;
+            color: var(--text-color);
+            font-weight: 400;
+            margin-bottom: 15px;
         }
 
         .divider {
-            width: 90px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #d4af37, transparent);
-            margin: 30px auto;
+            width: 60px;
+            height: 1px;
+            background: var(--text-color);
+            margin: 25px auto;
+            opacity: 0.4;
         }
 
         .details-box {
-            background-color: #faf7f2;
-            padding: 28px;
-            border-radius: 14px;
+            background-color: #faf8f5;
+            padding: 25px;
+            border-radius: 4px;
             margin: 30px 0;
             text-align: left;
-            border-left: 3px solid #d4af37;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.01);
+            border: 1px solid var(--accent-line);
         }
 
-        .details-item {
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 1.02rem;
-            color: #4a453e;
+        .details-item { margin-bottom: 14px; display: flex; gap: 12px; font-size: 1.1rem; }
+        .details-item strong { color: var(--text-color); font-weight: 600; }
+
+        h2 { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 2.2rem; 
+            color: var(--text-color); 
+            font-weight: 400;
+            margin: 35px 0 15px; 
         }
 
-        .details-item:last-child { margin-bottom: 0; }
-
-        .details-item strong {
-            color: #7d6542;
-            min-width: 95px;
-        }
-
-        h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.4rem;
-            color: #7d6542;
-            margin: 35px 0 15px;
-            font-weight: 600;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            text-align: left;
-            margin-top: 25px;
-        }
-
-        label {
-            font-size: 0.88rem;
-            font-weight: 500;
-            color: #555;
-            letter-spacing: 0.5px;
-        }
-
+        form { display: flex; flex-direction: column; gap: 18px; text-align: left; margin-top: 20px; }
+        label { font-size: 1rem; color: var(--text-color); }
+        
         input, select, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #e0d8c8;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 1rem;
-            outline: none;
-            background: #fcfbf9;
-            color: #333;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: #b38e36;
+            width: 100%; 
+            padding: 13px 15px; 
+            border: 1px solid var(--accent-line);
+            border-radius: 2px; 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 1.1rem; 
+            outline: none; 
             background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(179, 142, 54, 0.12);
+            color: var(--text-color);
         }
 
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 6px;
-        }
+        input:focus, select:focus, textarea:focus { border-color: var(--text-color); }
+        
+        .radio-group { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
+        .radio-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 1.1rem; }
+        .radio-option input { width: auto; }
 
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            font-size: 0.98rem;
+        button {
+            background: var(--text-color);
+            color: #ffffff; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 2px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer; 
+            margin-top: 15px;
+            transition: background 0.3s ease;
         }
-
-        .radio-option input {
-            width: auto;
-            accent-color: #b38e36;
-            transform: scale(1.1);
-        }
-
-        button.btn-submit {
-            background: linear-gradient(135deg, #d4af37 0%, #b38e36 50%, #8c6c21 100%);
-            color: #ffffff;
-            border: none;
-            padding: 17px;
-            border-radius: 35px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 8px 25px rgba(179, 142, 54, 0.35);
-            transition: all 0.3s ease;
-        }
-
-        button.btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(179, 142, 54, 0.45);
-        }
-
-        /* Responsive Design Adjustments */
-        @media (max-width: 600px) {
-            .card-container { padding: 40px 22px; }
-            .names { font-size: 2.7rem; }
-            .wax-seal-svg { width: 145px; height: 145px; }
-            .seal-title { font-size: 1.55rem; }
-            .envelope-container { height: 460px; }
-        }
+        
+        button:hover { background: #2c2520; }
     </style>
 </head>
 <body>
 
+<!-- UMSCHLAG OVERLAY (AN DAS BILD ANGEPASST) -->
 <div id="stage-overlay">
     <div class="envelope-container" id="envelope-box">
-        <!-- Vertical Split Flaps -->
         <div class="flap-left"></div>
         <div class="flap-right"></div>
         
-        <!-- Translucent Veil Overlays -->
-        <div class="veil veil-left">
-            <div class="pearl" style="top:20%; left:35%;"></div>
-            <div class="pearl" style="top:58%; left:70%;"></div>
-            <div class="pearl" style="top:82%; left:45%;"></div>
-        </div>
-        <div class="veil veil-right">
-            <div class="pearl" style="top:25%; right:60%;"></div>
-            <div class="pearl" style="top:52%; right:30%;"></div>
-            <div class="pearl" style="top:85%; right:65%;"></div>
-        </div>
+        <div class="veil veil-left"></div>
+        <div class="veil veil-right"></div>
 
-        <!-- Ultra-Realistic 3D Wax Seal Button -->
-        <div class="seal-interactive" onclick="openEnvelope()" role="button" tabindex="0" aria-label="Einladung öffnen">
-            
-            <svg class="wax-seal-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <!-- Master Gold Gradients -->
-                    <radialGradient id="waxGradient" cx="35%" cy="30%" r="70%">
-                        <stop offset="0%" stop-color="#fff5d6"/>
-                        <stop offset="20%" stop-color="#e8c252"/>
-                        <stop offset="50%" stop-color="#be932b"/>
-                        <stop offset="80%" stop-color="#7d5c12"/>
-                        <stop offset="100%" stop-color="#422f04"/>
-                    </radialGradient>
-
-                    <radialGradient id="stampGradient" cx="40%" cy="35%" r="65%">
-                        <stop offset="0%" stop-color="#fce392"/>
-                        <stop offset="40%" stop-color="#cca12f"/>
-                        <stop offset="80%" stop-color="#8a6713"/>
-                        <stop offset="100%" stop-color="#4d3706"/>
-                    </radialGradient>
-
-                    <linearGradient id="goldMetal" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="30%" stop-color="#f3d375"/>
-                        <stop offset="70%" stop-color="#a67c1e"/>
-                        <stop offset="100%" stop-color="#fff2c4"/>
-                    </linearGradient>
-
-                    <linearGradient id="textGoldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="40%" stop-color="#f2cf68"/>
-                        <stop offset="85%" stop-color="#87620e"/>
-                    </linearGradient>
-
-                    <!-- Real 3D Bevel & Emboss Filters -->
-                    <filter id="bevelFilter" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
-                        <feSpecularLighting in="blur" surfaceScale="5" specularConstant="1.2" specularExponent="15" lighting-color="#fff8db" result="specular">
-                            <feDistantLight azimuth="45" elevation="55"/>
-                        </feSpecularLighting>
-                        <feComposite in="specular" in2="SourceAlpha" operator="in" result="specular"/>
-                        <feComposite in="SourceGraphic" in2="specular" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
-                    </filter>
-
-                    <filter id="embossText" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="#fff" flood-opacity="0.6"/>
-                        <feDropShadow dx="-1" dy="-1" stdDeviation="1.5" flood-color="#000" flood-opacity="0.8"/>
-                    </filter>
-                </defs>
-
-                <!-- Organic Melted Wax Outer Shape -->
-                <path class="wax-outer-rim" d="
-                    M 100,12 
-                    C 122,10 142,16 158,28 
-                    C 174,40 188,58 190,80 
-                    C 192,102 184,124 172,144 
-                    C 160,164 142,180 120,186 
-                    C 98,192 74,188 54,178 
-                    C 34,168 18,150 12,128 
-                    C 6,106 12,82 24,62 
-                    C 36,42 56,22 78,14 
-                    Z" />
-
-                <!-- Inner Stamped Wax Depression -->
-                <circle class="wax-inner-bed" cx="100" cy="100" r="66" filter="url(#bevelFilter)"/>
-                
-                <!-- Filigree Inner Metallic Rings -->
-                <circle class="gold-line" cx="100" cy="100" r="62"/>
-                <circle class="gold-line" cx="100" cy="100" r="57" stroke-dasharray="4,3"/>
-
-                <!-- Embossed Initials "A & L" -->
-                <text x="100" y="102" class="seal-initials-svg">A &amp; L</text>
-            </svg>
-
-            <div class="seal-title">Unsere Hochzeitseinladung</div>
-            <div class="seal-subtitle">Tippe das Siegel zum Öffnen</div>
+        <div class="envelope-header">
+            <div class="header-names">Katharina & Daniel</div>
+            <div class="main-script-title">Einladung</div>
+            <div class="date-section">
+                <div class="date-day">Samstag,</div>
+                <div class="date-full">den 25.09.2027</div>
+            </div>
         </div>
 
+        <!-- OVALES PERLMUTT-WACHSSIEGEL MIT K & D -->
+        <div class="seal-interactive" onclick="openEnvelope()">
+            <div class="pearl-wax-seal">
+                <div class="seal-inner-oval">
+                    <div class="seal-initials-content">
+                        <span class="initial-k">K</span>
+                        <span class="initial-amp">&</span>
+                        <span class="initial-d">D</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="envelope-footer">
+            <div class="footer-text">Bitte haltet Euch das Datum frei!</div>
+            <div class="footer-text" style="font-size: 0.95rem; opacity: 0.8; margin-top: 5px;">(Klicke auf das Siegel zum Öffnen)</div>
+        </div>
     </div>
 </div>
 
+<!-- HAUPTINHALT (EINLADUNGSKARTE & RSVP) -->
 <div class="main-wrapper" id="main-content">
-    <div class="card-container">
-        <p class="subtitle">Wir sagen Ja!</p>
-        <h1 class="names">Anna &amp; Lisa</h1>
-        <p class="quote">„Liebe ist das einzige, was wächst, wenn wir es verschwenden.“</p>
+    <div class="container">
+        <p class="names">Katharina & Daniel</p>
+        <h1 class="card-script-title">Wir heiraten!</h1>
+        <p style="font-style: italic; color: var(--text-light); font-size: 1.2rem;">„Liebe ist das Band, das zwei Herzen verbindet, zwei Leben vereint und aus einem Paar eine Familie macht.“</p>
 
         <div class="divider"></div>
 
-        <p style="font-size: 1.05rem; line-height: 1.7; color: #555;">
-            Wir freuen uns von ganzem Herzen darauf, unseren besonderen Tag im Kreise unserer liebsten Menschen zu feiern!
-        </p>
+        <p style="font-size: 1.15rem; line-height: 1.7;">Wir freuen uns riesig darauf, unseren besonderen Tag gemeinsam mit euch zu feiern!</p>
 
         <div class="details-box">
-            <div class="details-item">
-                <span>📅</span> <strong>Datum:</strong> 15. August 2026
-            </div>
-            <div class="details-item">
-                <span>⏰</span> <strong>Uhrzeit:</strong> 14:00 Uhr
-            </div>
-            <div class="details-item">
-                <span>📍</span> <strong>Location:</strong> Schloss Blümchen, Musterstraße 1
-            </div>
-            <div class="details-item">
-                <span>👗</span> <strong>Dresscode:</strong> Festlich &amp; Elegant
-            </div>
+            <div class="details-item">📅 <strong>Datum:</strong> Samstag, 25. September 2027</div>
+            <div class="details-item">⏰ <strong>Uhrzeit:</strong> 16:00 Uhr</div>
+            <div class="details-item">📍 <strong>Ort:</strong> Hotel Viktorosa, Erlenweg 2, 34369 Hofgeismar</div>
+            <div class="details-item">👗 <strong>Dresscode:</strong> Festlich & Elegant</div>
         </div>
 
         <div class="divider"></div>
 
         <h2>Rückmeldung (RSVP)</h2>
-        <p style="font-size: 0.92rem; color: #666; margin-bottom: 20px;">
-            Bitte gebt uns bis zum <strong>01. Juli 2026</strong> Bescheid, ob ihr diesen Tag mit uns feiert.
-        </p>
+        <p style="font-size: 1.05rem; margin-bottom: 15px;">Bitte gebt uns bis zum <strong>01. Juli 2027</strong> Bescheid, ob ihr dabei sein könnt.</p>
 
+        <!-- FORMULAR (HIER DEINEN FORMSPREE-LINK EINSETZEN) -->
         <form action="https://formspree.io/f/DEINE_FORMSPREE_ID" method="POST">
             <div>
-                <label for="name">Vor- und Nachname *</label>
-                <input type="text" id="name" name="Name" placeholder="z.B. Max &amp; Erika Mustermann" required>
+                <label for="name">Dein / Eure Namen *</label>
+                <input type="text" id="name" name="Name" placeholder="z.B. Max & Erika Mustermann" required>
             </div>
 
             <div>
-                <label>Bist du dabei? *</label>
+                <label>Nimmst du an unserer Feier teil? *</label>
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="Status" value="Zusage" checked required> 
-                        <span>Ja, ich/wir kommen sehr gerne!</span>
+                        <input type="radio" name="Status" value="Zusage" checked required>
+                        Ja, ich/wir kommen gerne!
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="Status" value="Absage"> 
-                        <span>Nein, leider kann ich/können wir nicht kommen.</span>
+                        <input type="radio" name="Status" value="Absage">
+                        Nein, leider nicht
                     </label>
                 </div>
             </div>
@@ -570,15 +455,15 @@
 
             <div>
                 <label for="diet">Essenswünsche / Unverträglichkeiten</label>
-                <input type="text" id="diet" name="Essenswunsch" placeholder="z.B. Vegetarisch, Vegan, Glutenfrei...">
+                <input type="text" id="diet" name="Essenswunsch" placeholder="z.B. 1x Vegetarisch, Glutenfrei...">
             </div>
 
             <div>
                 <label for="message">Nachricht an das Brautpaar</label>
-                <textarea id="message" name="Nachricht" rows="3" placeholder="Deine Wünsche oder persönliche Worte..."></textarea>
+                <textarea id="message" name="Nachricht" rows="3" placeholder="Deine Wünsche oder Anmerkungen..."></textarea>
             </div>
 
-            <button type="submit" class="btn-submit">Antwort Absenden</button>
+            <button type="submit">Antwort absenden</button>
         </form>
     </div>
 </div>
@@ -592,22 +477,13 @@
         envelope.classList.add('open');
         mainContent.classList.add('visible');
         
-        // Smoothly fade out overlay stage after curtain animation finishes
         setTimeout(() => {
             overlay.style.opacity = '0';
             setTimeout(() => {
                 overlay.style.display = 'none';
             }, 1200);
-        }, 850);
+        }, 800);
     }
-
-    // Keyboard accessibility (Enter or Space to open seal)
-    document.querySelector('.seal-interactive').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openEnvelope();
-        }
-    });
 </script>
 
 </body>
